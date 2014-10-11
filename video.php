@@ -5,7 +5,7 @@ class video
 	private $dependcheck;
 	function __construct()
 	{
-		require 'dependcheck.php';	
+		require_once 'dependcheck.php';	
 		$this->dependcheck=new dependcheck;
 	}
 	
