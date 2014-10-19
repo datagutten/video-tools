@@ -12,11 +12,13 @@ class video
 	public function duration($file,$tool='ffprobe') //Return the duration of $file in seconds
 	{
 		if($tool=='ffprobe' && $this->dependcheck->depend('ffprobe'))
-			return floor(trim(shell_exec("ffprobe -i \"$file\" -show_entries format=duration -v quiet -of csv=\"p=0\"")));
-		if($tool=='mediainfo' && $this->dependcheck->depend('mediainfo'))
-			return floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
-		else
+			$duration=floor(trim(shell_exec("ffprobe -i \"$file\" -show_entries format=duration -v quiet -of csv=\"p=0\"")));
+		elseif($tool=='mediainfo' && $this->dependcheck->depend('mediainfo'))
+			$duration=floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
+		if(empty($duration)) //If duration is not set or zero something has failed
 			return false;
+		else
+			return $duration;
 	}
 	
 	public function snapshotsteps($file,$steps=4,$first=false,$last=false) //Calculate snapshot time steps
