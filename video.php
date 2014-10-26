@@ -90,7 +90,7 @@ class video
 				}
 				elseif($tool=='ffmpeg') //Create snapshots using ffmpeg
 				{
-					$timestring=date('H:i:s',$time-3600);
+					$timestring=date('H:i:s',$time);
 					echo $log=shell_exec($cmd="ffmpeg -loglevel error -stats -ss $timestring.000 -i \"$file\" -f image2 -vframes 1  \"$snapshotfile\" 2>&1"); //>/dev/null 2>&1 &
 				}
 				$elapsedtime=time()-$starttime;
@@ -108,7 +108,7 @@ class video
 			else
 				$snapshots[]=$snapshotfile;
 		}
-		if(!isset($snapshots))
+		if(empty($snapshots))
 			$snapshots=false;
 		return $snapshots; //Returnerer et array med bildenes filnavn
 	}	
