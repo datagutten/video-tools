@@ -69,7 +69,8 @@ class video
 
 		$snapshots=array();
 		$basename=basename($file);
-		$snapshotdir=$snapshotdir.$basename."/";
+		$snapshotdir=$snapshotdir."/".$basename."/";
+
 		if(!file_exists($snapshotdir))
 			mkdir($snapshotdir,0777,true);
 
