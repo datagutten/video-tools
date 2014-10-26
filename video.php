@@ -7,12 +7,18 @@ class video
 	{
 		require_once 'dependcheck.php';	
 		$this->dependcheck=new dependcheck;
+		date_default_timezone_set('GMT');
 	}
 	
 	public function duration($file,$tool='ffprobe') //Return the duration of $file in seconds
 	{
 		if($tool=='ffprobe' && $this->dependcheck->depend('ffprobe'))
-			$duration=floor(trim(shell_exec("ffprobe -i \"$file\" -show_entries format=duration -v quiet -of csv=\"p=0\"")));
+		{
+			//$duration=floor(trim($return=shell_exec("ffprobe -i \"$file\" -show_entries format=duration -v quiet -of csv=\"p=0\"")));
+			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
+			preg_match("/Duration: ([0-9:\.]+)/",$return,$matches);
+			$duration=strtotime($matches[1],0);
+		}
 		elseif($tool=='mediainfo' && $this->dependcheck->depend('mediainfo'))
 			$duration=floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
 		if(empty($duration)) //If duration is not set or zero something has failed
@@ -51,6 +57,11 @@ class video
 			case 'mplayer':
 			break;
 			default: trigger_error("$tool is not a valid snapshot tool",E_USER_ERROR);		
+		}
+		if(!is_array($positions))
+		{
+			trigger_error("Positions is not array",E_USER_WARNING);
+			return false;
 		}
 
 		if($this->dependcheck->depend($tool)!==true)
