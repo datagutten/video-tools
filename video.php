@@ -91,16 +91,15 @@ class video
 				elseif($tool=='ffmpeg') //Create snapshots using ffmpeg
 				{
 					$timestring=date('H:i:s',$time);
-					echo $log=shell_exec($cmd="ffmpeg -loglevel error -stats -ss $timestring.000 -i \"$file\" -f image2 -vframes 1  \"$snapshotfile\" 2>&1"); //>/dev/null 2>&1 &
+					$log=shell_exec($cmd="ffmpeg  -stats -ss $timestring.000 -i \"$file\" -f image2 -vframes 1  \"$snapshotfile\" 2>&1"); //-loglevel error
 				}
 				$elapsedtime=time()-$starttime;
-				echo "\nCreated $snapshotfile in $elapsedtime seconds\n\n";
 
 				if(file_exists($snapshotfile))
 					$snapshots[]=$snapshotfile;
 				else
 				{
-					trigger_error(nl2br(htmlentities("Failed to create snapshot: $log")),E_USER_WARNING);
+					trigger_error(nl2br(htmlentities("Failed to create snapshot: ".trim($log))),E_USER_WARNING);
 					echo $cmd."<br />\n";
 					continue;
 				}
