@@ -9,14 +9,15 @@ class video
 		$this->dependcheck=new dependcheck;
 		date_default_timezone_set('GMT');
 	}
-	
+
 	public function duration($file,$tool='ffprobe') //Return the duration of $file in seconds
 	{
 		if($tool=='ffprobe' && $this->dependcheck->depend('ffprobe'))
 		{
 			//$duration=floor(trim($return=shell_exec("ffprobe -i \"$file\" -show_entries format=duration -v quiet -of csv=\"p=0\"")));
 			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
-			preg_match("/Duration: ([0-9:\.]+)/",$return,$matches);
+			if(!preg_match("/Duration: ([0-9:\.]+)/",$return,$matches))
+				return false;
 			$duration=strtotime($matches[1],0);
 		}
 		elseif($tool=='mediainfo' && $this->dependcheck->depend('mediainfo'))
