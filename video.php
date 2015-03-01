@@ -31,12 +31,13 @@ class video
 	public function snapshotsteps($file,$steps=4,$first=false,$last=false) //Calculate snapshot time steps
 	{
 		$duration=$this->duration($file);
-		if($duration===false)
+		if($duration===false || $duration<$steps)
 			return false;
 		$step=floor($duration/($steps+1)); //Get the step size
 		
 		$steplist=range($step,$duration,$step); //Make an array with the positions
-
+		if(!is_array($steplist))
+			return false;
 		if($first!==false)
 			array_unshift($steplist,1);
 		if($last===false)
