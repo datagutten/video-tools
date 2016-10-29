@@ -12,7 +12,7 @@ class video
 
 	public function duration($file,$tool='ffprobe') //Return the duration of $file in seconds
 	{
-		if($tool=='ffprobe' && $this->dependcheck->depend('ffprobe'))
+		if($tool=='ffprobe' && $this->dependcheck->depend('ffprobe')===true)
 		{
 			//$duration=floor(trim($return=shell_exec("ffprobe -i \"$file\" -show_entries format=duration -v quiet -of csv=\"p=0\"")));
 			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
@@ -20,8 +20,13 @@ class video
 				return false;
 			$duration=strtotime($matches[1],0);
 		}
-		elseif($tool=='mediainfo' && $this->dependcheck->depend('mediainfo'))
+		elseif($tool=='mediainfo' && $this->dependcheck->depend('mediainfo')===true)
 			$duration=floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
+		else
+		{
+			$this->error='ffprobe or mediainfo is required to get duration';
+			return false;
+		}
 		if(empty($duration)) //If duration is not set or zero something has failed
 			return false;
 		else
