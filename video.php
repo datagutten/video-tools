@@ -3,22 +3,43 @@
 class video
 {
 	private $dependcheck;
+	public $error;
 	function __construct()
 	{
 		require_once 'dependcheck.php';	
 		$this->dependcheck=new dependcheck;
-		date_default_timezone_set('GMT');
+	}
+	function time_to_seconds($time)
+	{
+		//https://stackoverflow.com/questions/4834202/convert-time-in-hhmmss-format-to-seconds-only
+		$time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $time);
+		sscanf($time, "%d:%d:%d", $hours, $minutes, $seconds);
+
+		$time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
+		return $time_seconds;
+	}
+	function seconds_to_time($seconds)
+	{
+		//https://stackoverflow.com/a/3172368/2630074
+		return sprintf('%02d:%02d:%02d',floor($seconds/3600),floor(($seconds/60) % 60),$seconds % 60);
 	}
 
 	public function duration($file,$tool='ffprobe') //Return the duration of $file in seconds
 	{
+		if(!file_exists($file))
+		{
+			$this->error=$file.' does not exist';
+			return false;
+		}
 		if($tool=='ffprobe' && $this->dependcheck->depend('ffprobe')===true)
 		{
-			//$duration=floor(trim($return=shell_exec("ffprobe -i \"$file\" -show_entries format=duration -v quiet -of csv=\"p=0\"")));
 			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
 			if(!preg_match("/Duration: ([0-9:\.]+)/",$return,$matches))
+			{
+				$this->error=$return;
 				return false;
-			$duration=strtotime($matches[1],0);
+			}
+			return $this->time_to_seconds($matches[1]);
 		}
 		elseif($tool=='mediainfo' && $this->dependcheck->depend('mediainfo')===true)
 			$duration=floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
@@ -85,7 +106,6 @@ class video
 		{
 			if($time==3600)
 				$time=3550;
-			echo $time."s\n";
 			if(!file_exists($snapshotfile=$snapshotdir.str_pad($time,4,'0',STR_PAD_LEFT).".png"))
 			{
 				$starttime=time();
@@ -97,7 +117,7 @@ class video
 				}
 				elseif($tool=='ffmpeg') //Create snapshots using ffmpeg
 				{
-					$timestring=date('H:i:s',$time);
+					$timestring=$this->seconds_to_time($time);
 					$log=shell_exec($cmd="ffmpeg  -stats -ss $timestring.000 -i \"$file\" -f image2 -vframes 1  \"$snapshotfile\" 2>&1"); //-loglevel error
 				}
 				$elapsedtime=time()-$starttime;
@@ -106,9 +126,8 @@ class video
 					$snapshots[]=$snapshotfile;
 				else
 				{
-					trigger_error(nl2br(htmlentities("Failed to create snapshot: ".trim($log))),E_USER_WARNING);
-					echo $cmd."<br />\n";
-					continue;
+					$this->error=sprintf('Failed to create snapshot:\nCommand: %s\nLog:\n%s',$cmd,$log);
+					return false;
 				}
 			}
 			else
