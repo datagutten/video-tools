@@ -38,7 +38,7 @@ class video
 			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
 			if(!preg_match("/Duration: ([0-9:\.]+)/",$return,$matches))
 				throw new Exception('Unable to find duration using ffprobe');
-			$duration=strtotime($matches[1],0);
+			$duration = $this->time_to_seconds($matches[1]);
 		}
 		elseif($tool=='mediainfo' && $this->dependcheck->depend('mediainfo')===true)
 		{
