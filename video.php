@@ -24,34 +24,32 @@ class video
 		return sprintf('%02d:%02d:%02d',floor($seconds/3600),floor(($seconds/60) % 60),$seconds % 60);
 	}
 
-	public function duration($file,$tool='ffprobe') //Return the duration of $file in seconds
+	/**
+	 * Get the duration of a file using ffprobe or mediainfo
+	 * @param string $file File name
+	 * @param string $tool Tool to be used (default ffprobe)
+	 * @return int Duration in seconds
+	 * @throws Exception
+	 */
+	public function duration($file, $tool='ffprobe')
 	{
-		if(!file_exists($file))
-		{
-			$this->error=$file.' does not exist';
-			return false;
-		}
 		if($tool=='ffprobe' && $this->dependcheck->depend('ffprobe')===true)
 		{
 			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
 			if(!preg_match("/Duration: ([0-9:\.]+)/",$return,$matches))
-			{
-				$this->error=$return;
-				return false;
-			}
-			return $this->time_to_seconds($matches[1]);
+				throw new Exception('Unable to find duration using ffprobe');
+			$duration=strtotime($matches[1],0);
 		}
 		elseif($tool=='mediainfo' && $this->dependcheck->depend('mediainfo')===true)
-			$duration=floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
-		else
 		{
-			$this->error='ffprobe or mediainfo is required to get duration';
-			return false;
+			$duration=floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
+			if(empty($duration))
+				throw new Exception('Unable to get duration using mediainfo');
 		}
-		if(empty($duration)) //If duration is not set or zero something has failed
-			return false;
 		else
-			return $duration;
+			throw new Exception('Invalid tool or no valid tools installed');
+
+		return $duration;
 	}
 	
 	public function snapshotsteps($file,$steps=4,$first=false,$last=false) //Calculate snapshot time steps
