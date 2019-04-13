@@ -156,12 +156,11 @@ class video_download
         $check = new video_duration_check;
         if (!empty($duration)) {
             try {
+                //Check if file is already downloaded and has valid duration
                 if (file_exists($file . '.mp4'))
                     return $check->check_file_duration($file . '.mp4', $duration);
-                elseif (file_exists($file . '.mp4'))
+                elseif (file_exists($file . '.mkv'))
                     return $check->check_file_duration($file . '.mkv', $duration);
-                //File is already downloaded and has valid duration
-                return $file;
             } catch (WrongDurationException $e) {
                 var_dump($e);
                 echo $e->getMessage() . "\n";
