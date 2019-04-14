@@ -6,7 +6,7 @@ class video
 	public $error;
 	function __construct()
 	{
-		require_once 'dependcheck.php';	
+		require_once '../tools/dependcheck.php';
 		$this->dependcheck=new dependcheck;
 	}
 	function time_to_seconds($time)
