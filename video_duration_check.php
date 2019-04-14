@@ -61,5 +61,9 @@ class video_duration_check extends video
             rename($file, $file . ".wrong_duration");
             throw $e;
         }
+        catch (Exception $e) {
+            rename($file, $file . ".bad_duration");
+            throw new WrongDurationException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        }
     }
 }
