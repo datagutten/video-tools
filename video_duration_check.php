@@ -1,5 +1,5 @@
 <?Php
-require_once '../tools/video.php';
+require_once 'video.php';
 require_once '../tools/exceptions.php';
 
 class WrongDurationException extends Exception
