@@ -44,19 +44,21 @@ class video
 	 * @param string $file File name
 	 * @param string $tool Tool to be used (default ffprobe)
 	 * @return int Duration in seconds
-	 * @throws Exception
+	 * @throws Exception|DependencyFailedException
 	 */
 	public function duration($file, $tool='ffprobe')
 	{
-		if($tool=='ffprobe' && $this->dependcheck->depend('ffprobe')===true)
+		if($tool=='ffprobe')
 		{
+            $this->dependcheck->depend('ffprobe');
 			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
 			if(!preg_match("/Duration: ([0-9:\.]+)/",$return,$matches))
 				throw new Exception('Unable to find duration using ffprobe');
 			$duration = $this->time_to_seconds($matches[1]);
 		}
-		elseif($tool=='mediainfo' && $this->dependcheck->depend('mediainfo')===true)
+		elseif($tool=='mediainfo')
 		{
+            $this->dependcheck->depend('mediainfo');
 			$duration=floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
 			if(empty($duration))
 				throw new Exception('Unable to get duration using mediainfo');
