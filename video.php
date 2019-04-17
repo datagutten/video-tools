@@ -7,24 +7,35 @@
 class video
 {
 	private $dependcheck;
-	public $error;
 	function __construct()
 	{
 		require_once '../tools/dependcheck.php';
 		$this->dependcheck=new dependcheck;
 	}
+
+    /**
+     * Convert duration in hours, minutes and seconds to seconds
+     * https://stackoverflow.com/questions/4834202/convert-time-in-hhmmss-format-to-seconds-only
+     * @param string $time Hours:Minutes:Seconds
+     * @return int Seconds
+     */
 	function time_to_seconds($time)
 	{
-		//https://stackoverflow.com/questions/4834202/convert-time-in-hhmmss-format-to-seconds-only
 		$time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $time);
 		sscanf($time, "%d:%d:%d", $hours, $minutes, $seconds);
 
 		$time_seconds = $hours * 3600 + $minutes * 60 + $seconds;
 		return $time_seconds;
 	}
+
+    /**
+     * Convert duration in seconds to hours, minutes and seconds
+     * https://stackoverflow.com/a/3172368/2630074
+     * @param int $seconds
+     * @return string Hours:Minutes:Seconds
+     */
 	function seconds_to_time($seconds)
 	{
-		//https://stackoverflow.com/a/3172368/2630074
 		return sprintf('%02d:%02d:%02d',floor($seconds/3600),floor(($seconds/60) % 60),$seconds % 60);
 	}
 
