@@ -87,7 +87,7 @@ class video_download
      */
     public function mkvmerge($filename, $mkv_file = null)
     {
-        $this->depend_check->require('mkvmerge');
+        $this->depend_check->depend('mkvmerge');
 
         if(empty($mkv_file))
         {
