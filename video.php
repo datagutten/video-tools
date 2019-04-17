@@ -1,5 +1,9 @@
 <?Php
-//Tools for video files
+/**
+ * Class video
+ * Tools for video files
+ */
+
 class video
 {
 	private $dependcheck;
@@ -51,44 +55,48 @@ class video
 
 		return $duration;
 	}
-	
-	public function snapshotsteps($file,$steps=4,$first=false,$last=false) //Calculate snapshot time steps
+
+    /**
+     * Calculate snapshot time steps
+     * @param $file
+     * @param int $steps Number of snapshots
+     * @param bool $first Include first frame
+     * @param bool $last Include last frame
+     * @return array
+     * @throws Exception|InvalidArgumentException
+     */
+	public function snapshotsteps($file,$steps=4,$first=false,$last=false)
 	{
 		$duration=$this->duration($file);
-		if($duration===false || $duration<$steps)
-			return false;
+		if($duration<$steps)
+			throw new InvalidArgumentException(sprintf('File duration is %d, not able to make %d snapshots', $duration, $steps));
 		$step=floor($duration/($steps+1)); //Get the step size
 		
-		$steplist=range($step,$duration,$step); //Make an array with the positions
-		if(!is_array($steplist))
-			return false;
+		$step_list=range($step,$duration,$step); //Make an array with the positions
+		if(!is_array($step_list))
+			throw new Exception(sprintf('Unable to create steps'));
 		if($first!==false)
-			array_unshift($steplist,1);
+			array_unshift($step_list,1);
 		if($last===false)
-			array_pop($steplist); //remove the last position
-		return $steplist;
-
+			array_pop($step_list); //remove the last position
+		return $step_list;
 	}
-	
-	public function snapshots($file,$positions=array(65,300,600,1000),$snapshotdir="snapshots/",$tool='ffmpeg') //Second argument can be an array with time positions or a number of snapshots to be created
+
+    /**
+     * @param $file
+     * @param array $positions Snapshot positions
+     * @param string $snapshotdir
+     * @param string $tool Tool to create snapshots
+     * @return array Snapshot image files
+     * @throws FileNotFoundException|InvalidArgumentException|Exception
+     */
+	public function snapshots($file,$positions=array(65,300,600,1000),$snapshotdir="snapshots/",$tool='ffmpeg')
 	{
 		if(!file_exists($file))
-		{
-			trigger_error("File not found: $file",E_USER_WARNING);
-			return false;	
-		}
-		switch($tool) //Check that the selected tool is valid
-		{
-			case 'ffmpeg':
-			case 'mplayer':
-			break;
-			default: trigger_error("$tool is not a valid snapshot tool",E_USER_ERROR);		
-		}
+		    throw new FileNotFoundException($file);
+
 		if(!is_array($positions))
-		{
-			trigger_error("Positions is not array",E_USER_WARNING);
-			return false;
-		}
+			throw new InvalidArgumentException('Positions is not array');
 
 		if($this->dependcheck->depend($tool)!==true)
 			trigger_error("$tool not found",E_USER_ERROR);
@@ -106,7 +114,6 @@ class video
 				$time=3550;
 			if(!file_exists($snapshotfile=$snapshotdir.str_pad($time,4,'0',STR_PAD_LEFT).".png"))
 			{
-				$starttime=time();
 				if($tool=='mplayer') //Create snapshots using mplayer
 				{
 					$log=shell_exec($cmd="mplayer -quiet -nosound -ss $time -vo png:z=9 -ao null -zoom -frames 1 \"$file\" 2>&1");
@@ -118,21 +125,19 @@ class video
 					$timestring=$this->seconds_to_time($time);
 					$log=shell_exec($cmd="ffmpeg  -stats -ss $timestring.000 -i \"$file\" -f image2 -vframes 1  \"$snapshotfile\" 2>&1"); //-loglevel error
 				}
-				$elapsedtime=time()-$starttime;
+				else
+                    throw new InvalidArgumentException(sprintf('%s is not a valid snapshot tool', $tool));
 
 				if(file_exists($snapshotfile))
 					$snapshots[]=$snapshotfile;
 				else
-				{
-					$this->error=sprintf('Failed to create snapshot:\nCommand: %s\nLog:\n%s',$cmd,$log);
-					return false;
-				}
+					throw new Exception(sprintf('Failed to create snapshot:\nCommand: %s\nLog:\n%s',$cmd,$log));
 			}
 			else
 				$snapshots[]=$snapshotfile;
 		}
 		if(empty($snapshots))
 			$snapshots=false;
-		return $snapshots; //Returnerer et array med bildenes filnavn
+		return $snapshots;
 	}	
 }
