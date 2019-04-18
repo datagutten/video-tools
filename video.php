@@ -3,23 +3,16 @@
  * Class video
  * Tools for video files
  */
-
+require_once '../tools/dependcheck.php';
 class video
 {
-	private $dependcheck;
-	function __construct()
-	{
-		require_once '../tools/dependcheck.php';
-		$this->dependcheck=new dependcheck;
-	}
-
     /**
      * Convert duration in hours, minutes and seconds to seconds
      * https://stackoverflow.com/questions/4834202/convert-time-in-hhmmss-format-to-seconds-only
      * @param string $time Hours:Minutes:Seconds
      * @return int Seconds
      */
-	function time_to_seconds($time)
+	public static function time_to_seconds($time)
 	{
 		$time = preg_replace("/^([\d]{1,2})\:([\d]{2})$/", "00:$1:$2", $time);
 		sscanf($time, "%d:%d:%d", $hours, $minutes, $seconds);
@@ -34,7 +27,7 @@ class video
      * @param int $seconds
      * @return string Hours:Minutes:Seconds
      */
-	function seconds_to_time($seconds)
+	public static function seconds_to_time($seconds)
 	{
 		return sprintf('%02d:%02d:%02d',floor($seconds/3600),floor(($seconds/60) % 60),$seconds % 60);
 	}
@@ -46,19 +39,20 @@ class video
 	 * @return int Duration in seconds
 	 * @throws Exception|DependencyFailedException
 	 */
-	public function duration($file, $tool='ffprobe')
+	public static function duration($file, $tool='ffprobe')
 	{
+	    $depend_check = new dependcheck();
 		if($tool=='ffprobe')
 		{
-            $this->dependcheck->depend('ffprobe');
+            $depend_check->depend('ffprobe');
 			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
 			if(!preg_match("/Duration: ([0-9:\.]+)/",$return,$matches))
 				throw new Exception('Unable to find duration using ffprobe');
-			$duration = $this->time_to_seconds($matches[1]);
+			$duration = self::time_to_seconds($matches[1]);
 		}
 		elseif($tool=='mediainfo')
 		{
-            $this->dependcheck->depend('mediainfo');
+            $depend_check->depend('mediainfo');
 			$duration=floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
 			if(empty($duration))
 				throw new Exception('Unable to get duration using mediainfo');
@@ -78,9 +72,9 @@ class video
      * @return array
      * @throws Exception|InvalidArgumentException
      */
-	public function snapshotsteps($file,$steps=4,$first=false,$last=false)
+	public static function snapshotsteps($file,$steps=4,$first=false,$last=false)
 	{
-		$duration=$this->duration($file);
+		$duration=self::duration($file);
 		if($duration<$steps)
 			throw new InvalidArgumentException(sprintf('File duration is %d, not able to make %d snapshots', $duration, $steps));
 		$step=floor($duration/($steps+1)); //Get the step size
@@ -105,14 +99,12 @@ class video
      */
 	public function snapshots($file,$positions=array(65,300,600,1000),$snapshotdir="snapshots/",$tool='ffmpeg')
 	{
+        $depend_check = new dependcheck();
 		if(!file_exists($file))
 		    throw new FileNotFoundException($file);
 
 		if(!is_array($positions))
 			throw new InvalidArgumentException('Positions is not array');
-
-		if($this->dependcheck->depend($tool)!==true)
-			trigger_error("$tool not found",E_USER_ERROR);
 
 		$snapshots=array();
 		$basename=basename($file);
@@ -127,6 +119,7 @@ class video
 				$time=3550;
 			if(!file_exists($snapshotfile=$snapshotdir.str_pad($time,4,'0',STR_PAD_LEFT).".png"))
 			{
+                $depend_check->depend($tool);
 				if($tool=='mplayer') //Create snapshots using mplayer
 				{
 					$log=shell_exec($cmd="mplayer -quiet -nosound -ss $time -vo png:z=9 -ao null -zoom -frames 1 \"$file\" 2>&1");
