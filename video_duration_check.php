@@ -42,7 +42,7 @@ class video_duration_check extends video
      * @param int $duration_reference Expected duration
      * @return string File name
      * @throws FileNotFoundException
-     * @throws WrongDurationException
+     * @throws WrongDurationException|Exception
      */
     public function check_file_duration($file, $duration_reference)
     {
@@ -63,7 +63,7 @@ class video_duration_check extends video
         }
         catch (Exception $e) {
             rename($file, $file . ".bad_duration");
-            throw new WrongDurationException($e->getMessage(), $e->getCode(), $e->getPrevious());
+            throw $e;
         }
     }
 }
