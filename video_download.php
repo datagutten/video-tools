@@ -135,12 +135,14 @@ class video_download
      * @param string $stream Stream URL to be downloaded
      * @param string $file File name to be saved (without extension, mp4 will be appended)
      * @param null $duration Expected duration, used for verifying the downloaded file
+     * @param bool mkvmerge Merge the downloaded file to mkv
      * @param int $loglevel ffmpeg log level
      * @return string
      * @throws DownloadFailedException
      * @throws FileNotFoundException
+     * @throws DependencyFailedException
      */
-    public static function ffmpeg_download($stream, $file, $duration = null, $loglevel = 16)
+    public static function ffmpeg_download($stream, $file, $duration = null, $mkvmerge = true, $loglevel = 16)
     {
         $check = new video_duration_check;
         if (!empty($duration)) {
@@ -169,6 +171,13 @@ class video_download
             {
                 throw new DownloadFailedException($e);
             }
+            if(pathinfo($file, PATHINFO_EXTENSION)==='mp4' && $mkvmerge) {
+                $file_mkv = self::mkvmerge($file);
+                unlink($file);
+                return $file_mkv;
+            }
+            else
+                return $file;
         }
 
         return $file;
