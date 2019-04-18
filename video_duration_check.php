@@ -21,7 +21,7 @@ class video_duration_check extends video
      * @return bool
      * @throws WrongDurationException
      */
-    private function check_duration($duration_check, $duration_reference, $tolerance = 90)
+    private static function check_duration($duration_check, $duration_reference, $tolerance = 90)
     {
         if ($duration_reference == $duration_check) //Duration is correct
             return true;
@@ -44,7 +44,7 @@ class video_duration_check extends video
      * @throws FileNotFoundException
      * @throws WrongDurationException|Exception
      */
-    public function check_file_duration($file, $duration_reference)
+    public static function check_file_duration($file, $duration_reference)
     {
         if (!file_exists($file))
             throw new FileNotFoundException($file);
@@ -54,8 +54,8 @@ class video_duration_check extends video
             throw new WrongDurationException('File is empty');
         }
         try {
-            $duration_file = $this->duration($file); //Get file duration
-            $this->check_duration($duration_file, $duration_reference);
+            $duration_file = self::duration($file); //Get file duration
+            self::check_duration($duration_file, $duration_reference);
             return $file;
         } catch (WrongDurationException $e) {
             rename($file, $file . ".wrong_duration");
