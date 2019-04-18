@@ -162,7 +162,6 @@ class video_download
                 elseif (file_exists($file . '.mkv'))
                     return $check->check_file_duration($file . '.mkv', $duration);
             } catch (WrongDurationException $e) {
-                var_dump($e);
                 echo $e->getMessage() . "\n";
             }
         }
