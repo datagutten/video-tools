@@ -20,17 +20,6 @@ require_once 'video_duration_check.php';
 
 class video_download
 {
-    public $depend_check;
-    public $video;
-    public $duration_check;
-
-    function __construct()
-    {
-        $this->depend_check = new dependcheck;
-        $this->video = new video;
-        $this->duration_check = new video_duration_check;
-    }
-
     /**
      * Generate file and folder name for TV program
      *
@@ -85,9 +74,10 @@ class video_download
      * @throws Exception
      * @throws DependencyFailedException
      */
-    public function mkvmerge($filename, $mkv_file = null)
+    public static function mkvmerge($filename, $mkv_file = null)
     {
-        $this->depend_check->depend('mkvmerge');
+        $depend_check = new dependcheck();
+        $depend_check->depend('mkvmerge');
 
         if(empty($mkv_file))
         {
@@ -106,7 +96,7 @@ class video_download
         $files = '';
         foreach ($filename as $file) {
             try {
-                $duration += $this->video->duration($file);
+                $duration += video::duration($file);
             }
             catch (Exception $e)
             {
@@ -122,7 +112,7 @@ class video_download
         }
 
         try {
-            return $this->duration_check->check_file_duration($mkv_file, $duration);
+            return video_duration_check::check_file_duration($mkv_file, $duration);
         }
         catch (FileNotFoundException | WrongDurationException $e) //No problem
         {
@@ -136,7 +126,7 @@ class video_download
             $cmd .= sprintf(' --chapter-charset UTF-8 --chapters "%s.chapters.txt"', $mkv_file);
         shell_exec($cmd . " 2>&1");
 
-        return $this->duration_check->check_file_duration($mkv_file, $duration);
+        return video_duration_check::check_file_duration($mkv_file, $duration);
     }
 
     /**
@@ -152,7 +142,6 @@ class video_download
      */
     public static function ffmpeg_download($stream, $file, $duration = null, $loglevel = 16)
     {
-        require_once 'video_duration_check.php';
         $check = new video_duration_check;
         if (!empty($duration)) {
             try {
