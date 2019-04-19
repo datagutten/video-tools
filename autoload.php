@@ -12,3 +12,6 @@ spl_autoload_register(function ($class_name) {
         include $class_name . '.php';
     }
 });
+
+if(file_exists(__DIR__.'../tools/autoload.php'))
+    require __DIR__.'../tools/autoload.php';

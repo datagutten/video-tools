@@ -1,6 +1,5 @@
 <?Php
-require_once 'video.php';
-require_once '../tools/exceptions.php';
+require 'autoload.php';
 
 class WrongDurationException extends Exception
 {

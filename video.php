@@ -3,7 +3,7 @@
  * Class video
  * Tools for video files
  */
-require_once '../tools/dependcheck.php';
+require 'autoload.php';
 class video
 {
     /**

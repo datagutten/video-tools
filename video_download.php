@@ -14,9 +14,8 @@ class DownloadFailedException extends Exception
     }
 }
 
-require_once '../tools/dependcheck.php';
-require_once '../tools/filnavn.php';
-require_once 'video_duration_check.php';
+require_once __DIR__.'/../tools/filnavn.php';
+require 'autoload.php';
 
 class video_download
 {
