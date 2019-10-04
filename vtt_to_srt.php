@@ -12,9 +12,7 @@ class vtt_to_srt extends srt
         //$sub = str_replace("WEBVTT\n\n", '', $sub);
         //$sub = str_replace("\n", "\r\n", $sub);
         preg_match_all('/([0-9:]+)\.([0-9]+) --> ([0-9:]+)\.([0-9]+)\s(.+)(?:\s\s|\z)/sU', $sub, $lines);
-        $count=1;
         $sub='';
-
 
         foreach ($lines[0] as $key=>$line)
         {
