@@ -3,7 +3,6 @@
  * Class video
  * Tools for video files
  */
-require 'autoload.php';
 class video
 {
     /**

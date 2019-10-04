@@ -1,0 +1,18 @@
+{
+    "name": "datagutten/video-tools",
+    "description": "A collection of tools for working with video files",
+    "type": "library",
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "datagutten",
+            "email": "datagutten@datagutten.net"
+        }
+    ],
+    "require": {
+        "datagutten/tools": "^1.1"
+    },
+    "autoload": {
+        "classmap": ["srt.php", "ttml_to_srt.php", "video.php", "video_download.php", "video_duration_check.php", "vtt_to_srt.php"]
+    }
+}

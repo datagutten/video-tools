@@ -14,9 +14,6 @@ class DownloadFailedException extends Exception
     }
 }
 
-require_once __DIR__.'/../tools/filnavn.php';
-require 'autoload.php';
-
 class video_download
 {
     /**
