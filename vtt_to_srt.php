@@ -25,6 +25,7 @@ class vtt_to_srt extends srt
             if(strlen($lines[3][$key])===5)
                 $lines[3][$key] = '00:' . $lines[3][$key];
             //$sub .= sprintf("%s,%s --> %s,%s\r\n%s\r\n\r\n", $lines[1][$key], $lines[2][$key], $lines[3][$key], $lines[4][$key], $lines[5][$key]);
+            $lines[5][$key] = html_entity_decode($lines[5][$key]);
             $this->add_line($lines[1][$key] . ',' . $lines[2][$key], $lines[3][$key] .','. $lines[4][$key], $lines[5][$key]);
         }
         return $this->sub;
