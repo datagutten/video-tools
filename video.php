@@ -126,7 +126,6 @@ class video
 				$time=3550;
 			if(!file_exists($snapshotfile=$snapshotdir.str_pad($time,4,'0',STR_PAD_LEFT).".png"))
 			{
-                $depend_check->depend($tool);
 				if($tool=='mplayer') //Create snapshots using mplayer
 				{
 					$log=shell_exec($cmd="mplayer -quiet -nosound -ss $time -vo png:z=9 -ao null -zoom -frames 1 \"$file\" 2>&1");
