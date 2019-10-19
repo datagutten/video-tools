@@ -86,8 +86,6 @@ class video
 		$step=floor($duration/($steps+1)); //Get the step size
 		
 		$step_list=range($step,$duration,$step); //Make an array with the positions
-		if(!is_array($step_list))
-			throw new Exception(sprintf('Unable to create steps'));
 		if($first!==false)
 			array_unshift($step_list,1);
 		if($last===false)
