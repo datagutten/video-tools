@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "datagutten/tools": "^1.1"
+        "datagutten/tools": "^1.2"
     },
     "autoload": {
         "classmap": ["srt.php", "ttml_to_srt.php", "video.php", "video_download.php", "video_duration_check.php", "vtt_to_srt.php"]
