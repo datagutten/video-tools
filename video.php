@@ -79,6 +79,8 @@ class video
 	public static function snapshotsteps($file,$steps=4,$first=false,$last=false)
 	{
 		$duration=self::duration($file);
+		if(!is_numeric($steps))
+		    throw new InvalidArgumentException('Steps is not numeric');
 		if($duration<$steps)
 			throw new InvalidArgumentException(sprintf('File duration is %d, not able to make %d snapshots', $duration, $steps));
 		$step=floor($duration/($steps+1)); //Get the step size
