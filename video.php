@@ -56,7 +56,8 @@ class video
 		elseif($tool=='mediainfo')
 		{
             $depend_check->depend('mediainfo');
-			$duration=floor(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\"")/1000);
+            $duration_ms = trim(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\""));
+			$duration=(int)floor($duration_ms/1000);
 			if(empty($duration))
 				throw new Exception('Unable to get duration using mediainfo');
 		}
