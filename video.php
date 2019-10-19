@@ -98,7 +98,9 @@ class video
      * @param string $snapshotdir
      * @param string $tool Tool to create snapshots
      * @return array Snapshot image files
-     * @throws FileNotFoundException|InvalidArgumentException|Exception
+     * @throws FileNotFoundException File not found
+     * @throws DependencyFailedException Tool to make snapshots not found
+     * @throws Exception Snapshot creation failed
      */
 	public static function snapshots($file,$positions=array(65,300,600,1000),$snapshotdir="snapshots/",$tool=null)
 	{
