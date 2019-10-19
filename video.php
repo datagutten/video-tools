@@ -100,7 +100,7 @@ class video
      * @return array Snapshot image files
      * @throws FileNotFoundException|InvalidArgumentException|Exception
      */
-	public function snapshots($file,$positions=array(65,300,600,1000),$snapshotdir="snapshots/",$tool='ffmpeg')
+	public static function snapshots($file,$positions=array(65,300,600,1000),$snapshotdir="snapshots/",$tool=null)
 	{
         $depend_check = new dependcheck();
 		if(!file_exists($file))
@@ -135,7 +135,7 @@ class video
 				}
 				elseif($tool=='ffmpeg') //Create snapshots using ffmpeg
 				{
-					$timestring=$this->seconds_to_time($time);
+					$timestring=self::seconds_to_time($time);
 					$log=shell_exec($cmd="ffmpeg  -stats -ss $timestring.000 -i \"$file\" -f image2 -vframes 1  \"$snapshotfile\" 2>&1"); //-loglevel error
 				}
 				else
