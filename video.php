@@ -73,8 +73,8 @@ class video
      * @param int $steps Number of snapshots
      * @param bool $first Include first frame
      * @param bool $last Include last frame
-     * @return array
-     * @throws Exception|InvalidArgumentException
+     * @throws DependencyFailedException No tools available to get duration
+     * @return array Snapshot positions
      */
 	public static function snapshotsteps($file,$steps=4,$first=false,$last=false)
 	{
