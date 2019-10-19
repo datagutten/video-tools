@@ -36,11 +36,15 @@ class video
 	 * @param string $file File name
 	 * @param string $tool Tool to be used (default ffprobe)
 	 * @return int Duration in seconds
-	 * @throws Exception|DependencyFailedException
+	 * @throws Exception Thrown when duration is not found
+     * @throws DependencyFailedException Thrown when selected tool is not installed
 	 */
-	public static function duration($file, $tool='ffprobe')
+	public static function duration($file, $tool=null)
 	{
 	    $depend_check = new dependcheck();
+	    if(empty($tool))
+	        $tool = $depend_check->select_tool(['ffprobe', 'mediainfo']);
+
 		if($tool=='ffprobe')
 		{
             $depend_check->depend('ffprobe');
@@ -57,7 +61,7 @@ class video
 				throw new Exception('Unable to get duration using mediainfo');
 		}
 		else
-			throw new Exception('Invalid tool or no valid tools installed');
+			throw new InvalidArgumentException('Invalid tool');
 
 		return $duration;
 	}
