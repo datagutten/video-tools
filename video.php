@@ -108,6 +108,10 @@ class video
 
 		if(!is_array($positions))
 			throw new InvalidArgumentException('Positions is not array');
+        if(empty($tool))
+            $tool = $depend_check->select_tool(['mplayer', 'ffmpeg']);
+        else
+            $depend_check->depend($tool);
 
 		$snapshots=array();
 		$basename=basename($file);
