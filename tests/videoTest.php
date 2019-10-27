@@ -13,6 +13,8 @@ class videoTest extends TestCase
     }
     function testDurationMediainfo()
     {
+        if(PHP_OS=='WINNT')
+            $this->markTestSkipped('mediainfo does not work on windows');
         $duration = video::duration(__DIR__.'/test_data/Reklame Kornmo Treider 41.mp4', 'mediainfo');
         $this->assertSame(49, $duration);
     }
