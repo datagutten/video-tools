@@ -1,15 +1,24 @@
 <?Php
+
+use datagutten\video_tools\exceptions\SubtitleConversionException;
+
 class ttml_to_srt
 {
     public $datetime;
 
     /**
      * ttml_to_srt constructor.
-     * @throws Exception
+     * @throws SubtitleConversionException
      */
     function __construct()
     {
-        $this->datetime = new DateTime('now', new DateTimeZone('UTC'));
+        try {
+            $this->datetime = new DateTime('now', new DateTimeZone('UTC'));
+        }
+        catch (Exception $e)
+        {
+            throw new SubtitleConversionException($e->getMessage(), 0, $e);
+        }
     }
 
     /**
@@ -17,7 +26,7 @@ class ttml_to_srt
      * @param string $start Start time
      * @param string $duration Duration
      * @return string End time
-     * @throws Exception
+     * @throws SubtitleConversionException
      */
     public function end_time($start, $duration)
     {
@@ -27,7 +36,15 @@ class ttml_to_srt
         preg_match('/([0-9]+):([0-9]+):([0-9]+)\.([0-9]+)/', $duration, $dur);
 
         $dur_format = sprintf('PT%dH%dM%dS', $dur[1], $dur[2], $dur[3]);
-        $interval = new DateInterval($dur_format);
+        try
+        {
+            $interval = new DateInterval($dur_format);
+        }
+        catch (Exception $e)
+        {
+            throw new SubtitleConversionException($e->getMessage(), 0, $e);
+        }
+
         $interval->f = '.' . $dur[4];
 
         return $start->add($interval)->format('H:i:s.u');
@@ -37,7 +54,7 @@ class ttml_to_srt
      * Convert ttml to srt
      * @param string $ttml TTML file as string
      * @return string SRT file as string
-     * @throws Exception
+     * @throws SubtitleConversionException
      */
     public function convert($ttml)
     {
@@ -87,7 +104,7 @@ class ttml_to_srt
                             throw new Exception('Unhandled line break combination: '.$child->saveXML());
                         }*/
                     } else
-                        throw new Exception('Unable to parse child: ' . $child->saveXML());
+                        throw new SubtitleConversionException('Unable to parse child: ' . $child->saveXML());
                     $child_num++;
                 }
             }
@@ -102,7 +119,7 @@ class ttml_to_srt
      * Convert a TTML file to SRT
      * The new file is saved with same name, but the extension is replaced
      * @param string $file ttml file to be converted
-     * @throws Exception
+     * @throws SubtitleConversionException
      */
     public function convert_file($file)
     {

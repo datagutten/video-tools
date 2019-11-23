@@ -1,11 +1,7 @@
 <?Php
-class WrongDurationException extends Exception
-{
-    public function __construct($message, $code = 0, Exception $previous = null)
-    {
-        parent::__construct($message, $code, $previous);
-    }
-}
+
+use datagutten\video_tools\exceptions\DurationNotFoundException;
+use datagutten\video_tools\exceptions\WrongDurationException;
 
 class video_duration_check extends video
 {
@@ -35,11 +31,13 @@ class video_duration_check extends video
 
     /**
      * Check if the file exists and has valid duration
-     * @param $file
+     * @param string $file File to be checked
      * @param int $duration_reference Expected duration
      * @return string File name
-     * @throws FileNotFoundException
-     * @throws WrongDurationException|Exception
+     * @throws FileNotFoundException File not found
+     * @throws WrongDurationException File duration does not match reference
+     * @throws DurationNotFoundException Unable to get duration
+     * @throws DependencyFailedException
      */
     public static function check_file_duration($file, $duration_reference)
     {
@@ -58,7 +56,7 @@ class video_duration_check extends video
             rename($file, $file . ".wrong_duration");
             throw $e;
         }
-        catch (Exception $e) {
+        catch (DurationNotFoundException $e) {
             rename($file, $file . ".bad_duration");
             throw $e;
         }

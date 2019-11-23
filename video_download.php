@@ -1,18 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Anders
- * Date: 20.01.2019
- * Time: 15.27
- */
 
-class DownloadFailedException extends Exception
-{
-    public function __construct($message, $code = 0, Exception $previous = null)
-    {
-        parent::__construct($message, $code, $previous);
-    }
-}
+use datagutten\video_tools\exceptions\DownloadFailedException;
+use datagutten\video_tools\exceptions\DurationNotFoundException;
+use datagutten\video_tools\exceptions\WrongDurationException;
 
 class video_download
 {
@@ -21,14 +11,13 @@ class video_download
      *
      * @param $program
      * @return array
-     * @throws Exception
      */
     public static function season_episode($program)
     {
         if (empty($program) || !is_array($program))
-            throw new Exception('Argument must be a non-empty array');
+            throw new InvalidArgumentException('Argument must be a non-empty array');
         if (!isset($program['title']))
-            throw new Exception('title must be set');
+            throw new InvalidArgumentException('title must be set');
 
         if (empty($program['series'])) //Not part of a series
         {
@@ -67,8 +56,9 @@ class video_download
      * @param string $mkv_file File name for muxed file. Required when combining files
      * @return string Output from mkvmerge
      * @throws FileNotFoundException
-     * @throws Exception
      * @throws DependencyFailedException
+     * @throws DurationNotFoundException
+     * @throws WrongDurationException
      */
     public static function mkvmerge($filename, $mkv_file = null)
     {
@@ -78,7 +68,7 @@ class video_download
         if(empty($mkv_file))
         {
             if (is_array($filename))
-                throw new Exception('MKV file name need to be specified when using multiple input files');
+                throw new InvalidArgumentException('MKV file name need to be specified when using multiple input files');
             else
             {
                 $pathinfo = pathinfo($filename);
@@ -94,9 +84,9 @@ class video_download
             try {
                 $duration += video::duration($file);
             }
-            catch (Exception $e)
+            catch (DurationNotFoundException $e)
             {
-                echo $e->getMessage()."\n";
+                echo 'Unable to get duration of input file: '.$e->getMessage()."\n";
             }
             if(!file_exists($file))
                 throw new FileNotFoundException($file);
@@ -107,6 +97,7 @@ class video_download
                 $files .= ' + ' . $file;
         }
 
+        //Check if the file already exists and is valid
         try {
             return video_duration_check::check_file_duration($mkv_file, $duration);
         }
@@ -137,6 +128,8 @@ class video_download
      * @throws DownloadFailedException
      * @throws FileNotFoundException
      * @throws DependencyFailedException
+     * @throws DurationNotFoundException
+     * @throws WrongDurationException
      */
     public static function ffmpeg_download($stream, $file, $duration = null, $mkvmerge = true, $loglevel = 16)
     {
