@@ -6,14 +6,16 @@
  * Time: 12.43
  */
 
-use datagutten\video_tools\exceptions\SubtitleConversionException;
+use datagutten\video_tools\subtitles;
+use datagutten\video_tools\exceptions;
+
 
 require __DIR__.'/vendor/autoload.php';
 try {
-    $ttml_to_srt = new ttml_to_srt();
+    $ttml_to_srt = new subtitles\ttml_to_srt();
     $ttml_to_srt->convert_file($argv[1]);
 }
-catch (SubtitleConversionException $e)
+catch (exceptions\SubtitleConversionException $e)
 {
     echo $e->getMessage()."\n";
 }

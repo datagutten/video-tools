@@ -1,4 +1,9 @@
 <?php
+
+
+namespace datagutten\video_tools\subtitles;
+
+
 class vtt_to_srt extends srt
 {
     /**
