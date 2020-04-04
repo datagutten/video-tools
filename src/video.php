@@ -1,6 +1,13 @@
-<?Php
+<?php
 
-use datagutten\video_tools\exceptions\DurationNotFoundException;
+
+namespace datagutten\video_tools;
+
+use dependcheck;
+use DependencyFailedException;
+use Exception;
+use FileNotFoundException;
+use InvalidArgumentException;
 
 /**
  * Class video
@@ -39,7 +46,7 @@ class video
 	 * @param string $file File name
 	 * @param string $tool Tool to be used (default ffprobe)
 	 * @return int Duration in seconds
-	 * @throws DurationNotFoundException Thrown when duration is not found
+	 * @throws exceptions\DurationNotFoundException Thrown when duration is not found
      * @throws DependencyFailedException Thrown when selected tool is not installed
 	 */
 	public static function duration($file, $tool=null)
@@ -53,7 +60,7 @@ class video
             $depend_check->depend('ffprobe');
 			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
 			if(!preg_match("/Duration: ([0-9:\.]+)/",$return,$matches))
-				throw new DurationNotFoundException('Unable to find duration using ffprobe');
+				throw new exceptions\DurationNotFoundException('Unable to find duration using ffprobe');
 			$duration = self::time_to_seconds($matches[1]);
 		}
 		elseif($tool=='mediainfo')
@@ -62,7 +69,7 @@ class video
             $duration_ms = trim(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\""));
 			$duration=(int)floor($duration_ms/1000);
 			if(empty($duration))
-				throw new DurationNotFoundException('Unable to get duration using mediainfo');
+				throw new exceptions\DurationNotFoundException('Unable to get duration using mediainfo');
 		}
 		else
 			throw new InvalidArgumentException('Invalid tool');
@@ -77,7 +84,7 @@ class video
      * @param bool $first Include first frame
      * @param bool $last Include last frame
      * @throws DependencyFailedException No tools available to get duration
-     * @throws DurationNotFoundException Duration not found
+     * @throws exceptions\DurationNotFoundException Duration not found
      * @return array Snapshot positions
      */
 	public static function snapshotsteps($file,$steps=4,$first=false,$last=false)

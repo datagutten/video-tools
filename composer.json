@@ -14,7 +14,7 @@
         "ext-simplexml": "*"
     },
     "autoload": {
-        "classmap": ["srt.php", "ttml_to_srt.php", "video.php", "video_download.php", "video_duration_check.php", "vtt_to_srt.php"],
+        "classmap": ["srt.php", "ttml_to_srt.php", "vtt_to_srt.php"],
         "psr-4": {
             "datagutten\\video_tools\\": "src"
         }

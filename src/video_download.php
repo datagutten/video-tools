@@ -1,8 +1,12 @@
 <?php
 
-use datagutten\video_tools\exceptions\DownloadFailedException;
-use datagutten\video_tools\exceptions\DurationNotFoundException;
-use datagutten\video_tools\exceptions\WrongDurationException;
+
+namespace datagutten\video_tools;
+
+use dependcheck;
+use DependencyFailedException;
+use FileNotFoundException;
+use InvalidArgumentException;
 
 class video_download
 {
@@ -57,8 +61,8 @@ class video_download
      * @return string Output from mkvmerge
      * @throws FileNotFoundException
      * @throws DependencyFailedException
-     * @throws DurationNotFoundException
-     * @throws WrongDurationException
+     * @throws exceptions\DurationNotFoundException
+     * @throws exceptions\WrongDurationException
      */
     public static function mkvmerge($filename, $mkv_file = null)
     {
@@ -84,7 +88,7 @@ class video_download
             try {
                 $duration += video::duration($file);
             }
-            catch (DurationNotFoundException $e)
+            catch (exceptions\DurationNotFoundException $e)
             {
                 echo 'Unable to get duration of input file: '.$e->getMessage()."\n";
             }
@@ -101,7 +105,7 @@ class video_download
         try {
             return video_duration_check::check_file_duration($mkv_file, $duration);
         }
-        catch (FileNotFoundException | WrongDurationException $e) //No problem
+        catch (FileNotFoundException | exceptions\WrongDurationException $e) //No problem
         {
             echo $e->getMessage()."\n";
         }
@@ -125,11 +129,11 @@ class video_download
      * @param bool mkvmerge Merge the downloaded file to mkv
      * @param int $loglevel ffmpeg log level
      * @return string
-     * @throws DownloadFailedException
+     * @throws exceptions\DownloadFailedException
      * @throws FileNotFoundException
      * @throws DependencyFailedException
-     * @throws DurationNotFoundException
-     * @throws WrongDurationException
+     * @throws exceptions\DurationNotFoundException
+     * @throws exceptions\WrongDurationException
      */
     public static function ffmpeg_download($stream, $file, $duration = null, $mkvmerge = true, $loglevel = 16)
     {
@@ -141,7 +145,7 @@ class video_download
                     return $check->check_file_duration($file . '.mp4', $duration);
                 elseif (file_exists($file . '.mkv'))
                     return $check->check_file_duration($file . '.mkv', $duration);
-            } catch (WrongDurationException $e) {
+            } catch (exceptions\WrongDurationException $e) {
                 echo $e->getMessage() . "\n";
             }
         }
@@ -156,9 +160,9 @@ class video_download
         if (!empty($duration)) {
             try {
                 $check->check_file_duration($file, $duration);
-            } catch (WrongDurationException $e) // FileNotFoundException is not caught because it could be a fatal error
+            } catch (exceptions\WrongDurationException $e) // FileNotFoundException is not caught because it could be a fatal error
             {
-                throw new DownloadFailedException($e);
+                throw new exceptions\DownloadFailedException($e);
             }
             if(pathinfo($file, PATHINFO_EXTENSION)==='mp4' && $mkvmerge) {
                 $file_mkv = self::mkvmerge($file);
