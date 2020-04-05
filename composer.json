@@ -20,7 +20,7 @@
     },
     "bin": ["ttml_to_srt_cli.php", "vtt_to_srt_cli.php"],
     "require-dev": {
-        "phpunit/phpunit": "^8.4",
-        "symfony/filesystem": "^4.3"
+        "phpunit/phpunit": "^8.4|^9.0",
+        "symfony/filesystem": "^4.3|^5.0"
     }
 }
