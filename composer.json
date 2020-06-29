@@ -12,7 +12,8 @@
     "require": {
         "datagutten/tools": "^1.2",
         "ext-simplexml": "*",
-        "php": ">=7.1"
+        "php": ">=7.1",
+        "symfony/process": "^4|^5"
     },
     "autoload": {
         "psr-4": {

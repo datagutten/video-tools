@@ -8,6 +8,8 @@ use DependencyFailedException;
 use Exception;
 use FileNotFoundException;
 use InvalidArgumentException;
+use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 
 /**
  * Class video
@@ -57,11 +59,17 @@ class video
 
 		if($tool=='ffprobe')
 		{
-            $depend_check->depend('ffprobe');
-			$return=shell_exec("ffprobe -i \"$file\" 2>&1");
-			if(!preg_match("/Duration: ([0-9:\.]+)/",$return,$matches))
-				throw new exceptions\DurationNotFoundException('Unable to find duration using ffprobe');
-			$duration = self::time_to_seconds($matches[1]);
+            $process = new Process(['ffprobe', '-v', 'quiet', '-show_entries', 'format=duration', '-i', $file]);
+            $process->run();
+            if (!$process->isSuccessful()) {
+                throw new exceptions\DurationNotFoundException('Error', 0, new ProcessFailedException($process));
+            }
+
+            $output = $process->getOutput();
+            if(!preg_match("/duration=([0-9:\.]+)/",$output,$matches))
+                throw new exceptions\DurationNotFoundException('Unable to find duration using ffprobe');
+
+            return intval($matches[1]);
 		}
 		elseif($tool=='mediainfo')
 		{
