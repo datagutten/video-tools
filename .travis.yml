@@ -30,6 +30,7 @@ addons:
    apt:
       packages:
          - ffmpeg
+         - mediainfo
 
 before_install:
    - bash -c 'echo $TRAVIS_OS_NAME'
