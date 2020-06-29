@@ -23,6 +23,7 @@ matrix:
 
    allow_failures:
       -  php: 'nightly'
+      -  os: windows
 
 addons:
    apt:
