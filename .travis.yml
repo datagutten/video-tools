@@ -1,0 +1,47 @@
+language: php
+
+matrix:
+   include:
+      -  os: windows
+         language: sh
+         before_install:
+            - choco install php
+            - choco install composer
+            - choco install ffmpeg
+            - export PATH="/c/tools/php73:/c/Program Files (x86)/ComposerSetup/bin/:/c/ProgramData/chocolatey/lib/ffmpeg/tools:$PATH"
+            - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+            - php composer-setup.php
+      -  os: linux
+         php: '7.3'
+      -  php: 'nightly'
+         install:
+            - composer install --no-interaction --ignore-platform-reqs;
+      -  php: '7.4'
+      -  php: '7.4'
+         name: 'Prefer lowest'
+         install:
+            - composer install --no-interaction
+            - composer update --prefer-lowest
+
+   allow_failures:
+      -  php: 'nightly'
+
+addons:
+   apt:
+      packages:
+         - ffmpeg
+
+before_install:
+   - bash -c 'echo $TRAVIS_OS_NAME'
+
+install:
+   - composer install --no-interaction;
+
+before_script:
+   - vendor/bin/phpunit --version
+
+script:
+   - vendor/bin/phpunit
+
+after_script:
+   - if [ "$TRAVIS_OS_NAME" = "linux" ]; then bash <(curl -s https://codecov.io/bash); fi
