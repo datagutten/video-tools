@@ -1,34 +1,47 @@
 <?php
 
 
+use datagutten\tools\files\files;
 use datagutten\video_tools\video;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
 class videoTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    private $test_file;
+
+    function __construct(?string $name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->test_file = files::path_join(__DIR__, 'test_data', 'Reklame Kornmo Treider 41.mp4');
+    }
+
     function testDuration()
     {
-        $duration = video::duration(__DIR__.'/test_data/Reklame Kornmo Treider 41.mp4');
+        $duration = video::duration($this->test_file);
         $this->assertSame(49, $duration);
     }
     function testDurationMediainfo()
     {
         if(PHP_OS=='WINNT')
             $this->markTestSkipped('mediainfo does not work on windows');
-        $duration = video::duration(__DIR__.'/test_data/Reklame Kornmo Treider 41.mp4', 'mediainfo');
+        $duration = video::duration($this->test_file, 'mediainfo');
         $this->assertSame(49, $duration);
     }
     function testSnapshotSteps()
     {
-        $steps = video::snapshotsteps(__DIR__.'/test_data/Reklame Kornmo Treider 41.mp4');
+        $steps = video::snapshotsteps($this->test_file);
         $this->assertSame([9,18,27,36], $steps);
     }
     function testSnapshots()
     {
-        $steps = video::snapshotsteps(__DIR__.'/test_data/Reklame Kornmo Treider 41.mp4');
-        $snapshots = video::snapshots(__DIR__.'/test_data/Reklame Kornmo Treider 41.mp4', $steps, __DIR__.'/snapshots');
-        $path = __DIR__.'/snapshots/Reklame Kornmo Treider 41.mp4';
+        $steps = video::snapshotsteps($this->test_file);
+        $snapshot_folder = files::path_join(__DIR__, 'snapshots');
+        $snapshots = video::snapshots($this->test_file, $steps, $snapshot_folder);
+        $path = files::path_join($snapshot_folder, 'Reklame Kornmo Treider 41.mp4');
         $snapshots_expected = [$path.'/0009.png', $path.'/0018.png', $path.'/0027.png', $path.'/0036.png'];
         $this->assertSame($snapshots_expected, $snapshots);
     }
@@ -36,6 +49,6 @@ class videoTest extends TestCase
     function tearDown(): void
     {
         $filesystem = new Filesystem();
-        $filesystem->remove(__DIR__.'/snapshots');
+        $filesystem->remove(files::path_join(__DIR__, 'snapshots'));
     }
 }
