@@ -41,6 +41,8 @@ install:
 
 before_script:
    - vendor/bin/phpunit --version
+   #- mkdir tests/test_data
+   - wget -O tests/test_data/sample.mp4 http://techslides.com/demos/samples/sample.mp4
 
 script:
    - vendor/bin/phpunit
