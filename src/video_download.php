@@ -64,7 +64,7 @@ class video_download
      * @throws exceptions\DurationNotFoundException
      * @throws exceptions\WrongDurationException
      */
-    public static function mkvmerge($filename, $mkv_file = null)
+    public static function mkvmerge($filename, $mkv_file = '')
     {
         $depend_check = new dependcheck();
         $depend_check->depend('mkvmerge');

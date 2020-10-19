@@ -50,7 +50,7 @@ class video
 	 * @throws exceptions\DurationNotFoundException Thrown when duration is not found
      * @throws DependencyFailedException Thrown when selected tool is not installed
 	 */
-	public static function duration($file, $tool=null)
+	public static function duration(string $file, $tool='')
 	{
 	    $depend_check = new dependcheck();
 	    if(empty($tool))
@@ -74,6 +74,14 @@ class video
 		{
             $depend_check->depend('mediainfo');
             $duration_ms = trim(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\""));
+            /*$process = new Process(['mediainfo', '--Inform="General;%Duration%"', $file]);
+            $process->run();
+            if (!$process->isSuccessful()) {
+                throw new exceptions\DurationNotFoundException('Error', 0, new ProcessFailedException($process));
+            }
+
+            $duration_ms = trim($process->getOutput());
+            var_dump($duration_ms);*/
 			$duration=(int)floor($duration_ms/1000);
 			if(empty($duration))
 				throw new exceptions\DurationNotFoundException('Unable to get duration using mediainfo');
@@ -120,7 +128,7 @@ class video
      * @throws DependencyFailedException Tool to make snapshots not found
      * @throws Exception Snapshot creation failed
      */
-	public static function snapshots($file,$positions=array(65,300,600,1000),$snapshotdir="snapshots/",$tool=null)
+	public static function snapshots($file,$positions=array(65,300,600,1000),$snapshotdir="snapshots/",$tool='')
 	{
         $depend_check = new dependcheck();
 		if(!file_exists($file))
