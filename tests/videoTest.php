@@ -42,7 +42,12 @@ class videoTest extends TestCase
         $snapshot_folder = files::path_join(__DIR__, 'snapshots');
         $snapshots = video::snapshots($this->test_file, $steps, $snapshot_folder);
         $path = files::path_join($snapshot_folder, 'Reklame Kornmo Treider 41.mp4');
-        $snapshots_expected = [$path.'/0009.png', $path.'/0018.png', $path.'/0027.png', $path.'/0036.png'];
+        $snapshots_expected = [
+            files::path_join($path, '0009.png'),
+            files::path_join($path, '0018.png'),
+            files::path_join($path, '0027.png'),
+            files::path_join($path, '0036.png')
+        ];
         $this->assertSame($snapshots_expected, $snapshots);
     }
 

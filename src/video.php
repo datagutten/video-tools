@@ -3,6 +3,7 @@
 
 namespace datagutten\video_tools;
 
+use datagutten\tools\files\files;
 use dependcheck;
 use DependencyFailedException;
 use Exception;
@@ -121,14 +122,14 @@ class video
     /**
      * @param $file
      * @param array $positions Snapshot positions
-     * @param string $snapshotdir
+     * @param string $snapshot_dir
      * @param string $tool Tool to create snapshots
      * @return array Snapshot image files
      * @throws FileNotFoundException File not found
      * @throws DependencyFailedException Tool to make snapshots not found
      * @throws Exception Snapshot creation failed
      */
-	public static function snapshots($file,$positions=array(65,300,600,1000),$snapshotdir="snapshots/",$tool='')
+	public static function snapshots($file, $positions=array(65,300,600,1000), $snapshot_dir="snapshots/", $tool='')
 	{
         $depend_check = new dependcheck();
 		if(!file_exists($file))
@@ -143,38 +144,39 @@ class video
 
 		$snapshots=array();
 		$basename=basename($file);
-		$snapshotdir=$snapshotdir."/".$basename."/";
+		$snapshot_dir=files::path_join($snapshot_dir, $basename);
 
-		if(!file_exists($snapshotdir))
-			mkdir($snapshotdir,0777,true);
+		if(!file_exists($snapshot_dir))
+			mkdir($snapshot_dir,0777,true);
 
 		foreach ($positions as $time)
 		{
 			if($time==3600)
 				$time=3550;
-			if(!file_exists($snapshotfile=$snapshotdir.str_pad($time,4,'0',STR_PAD_LEFT).".png"))
+			$snapshot_file = files::path_join($snapshot_dir, str_pad($time,4,'0',STR_PAD_LEFT).".png");
+			if(!file_exists($snapshot_file))
 			{
 				if($tool=='mplayer') //Create snapshots using mplayer
 				{
 					$log=shell_exec($cmd="mplayer -quiet -nosound -ss $time -vo png:z=9 -ao null -zoom -frames 1 \"$file\" 2>&1");
 					if(file_exists($tmpfile='00000001.png'))
-						rename($tmpfile,$snapshotfile);
+						rename($tmpfile,$snapshot_file);
 				}
 				elseif($tool=='ffmpeg') //Create snapshots using ffmpeg
 				{
 					$timestring=self::seconds_to_time($time);
-					$log=shell_exec($cmd="ffmpeg  -stats -ss $timestring.000 -i \"$file\" -f image2 -vframes 1  \"$snapshotfile\" 2>&1"); //-loglevel error
+					$log=shell_exec($cmd="ffmpeg  -stats -ss $timestring.000 -i \"$file\" -f image2 -vframes 1  \"$snapshot_file\" 2>&1"); //-loglevel error
 				}
 				else
                     throw new InvalidArgumentException(sprintf('%s is not a valid snapshot tool', $tool));
 
-				if(file_exists($snapshotfile))
-					$snapshots[]=$snapshotfile;
+				if(file_exists($snapshot_file))
+					$snapshots[]=$snapshot_file;
 				else
 					throw new Exception(sprintf('Failed to create snapshot:\nCommand: %s\nLog:\n%s',$cmd,$log));
 			}
 			else
-				$snapshots[]=$snapshotfile;
+				$snapshots[]=$snapshot_file;
 		}
 		if(empty($snapshots))
 			$snapshots=false;
