@@ -41,7 +41,8 @@ class ttml_to_srt
         $date = $this->datetime;
         $start = $date->createFromFormat('H:i:s.u', $start);
 
-        preg_match('/([0-9]+):([0-9]+):([0-9]+)\.([0-9]+)/', $duration, $dur);
+        if(!preg_match('/([0-9]+):([0-9]+):([0-9]+)\.([0-9]+)/', $duration, $dur))
+            throw new exceptions\SubtitleConversionException('Unable to parse duration: '.$duration);
 
         $dur_format = sprintf('PT%dH%dM%dS', $dur[1], $dur[2], $dur[3]);
         try
