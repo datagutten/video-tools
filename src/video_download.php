@@ -158,12 +158,7 @@ class video_download
         echo shell_exec($cmd);
 
         if (!empty($duration)) {
-            try {
-                $check->check_file_duration($file, $duration);
-            } catch (exceptions\WrongDurationException $e) // FileNotFoundException is not caught because it could be a fatal error
-            {
-                throw new exceptions\DownloadFailedException($e);
-            }
+            $check->check_file_duration($file, $duration);
             if(pathinfo($file, PATHINFO_EXTENSION)==='mp4' && $mkvmerge) {
                 $file_mkv = self::mkvmerge($file);
                 unlink($file);

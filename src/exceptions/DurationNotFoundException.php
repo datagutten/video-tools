@@ -4,7 +4,7 @@
 namespace datagutten\video_tools\exceptions;
 
 
-class DurationNotFoundException extends VideoException
+class DurationNotFoundException extends DownloadFailedException
 {
 
 }
