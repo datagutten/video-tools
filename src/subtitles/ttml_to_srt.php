@@ -4,6 +4,7 @@
 namespace datagutten\video_tools\subtitles;
 
 
+use datagutten\tools\files\files;
 use datagutten\video_tools\exceptions;
 use DateInterval;
 use DateTime;
@@ -62,10 +63,11 @@ class ttml_to_srt
     /**
      * Convert ttml to srt
      * @param string $ttml TTML file as string
+     * @param bool $skip_errors Skip lines with conversion errors
      * @return string SRT file as string
      * @throws exceptions\SubtitleConversionException
      */
-    public function convert($ttml)
+    public function convert($ttml, $skip_errors = true)
     {
         $srt = '';
         $xml = simplexml_load_string($ttml);
@@ -128,13 +130,21 @@ class ttml_to_srt
      * Convert a TTML file to SRT
      * The new file is saved with same name, but the extension is replaced
      * @param string $file ttml file to be converted
+     * @return string Full path to srt file
      * @throws exceptions\SubtitleConversionException
      */
-    public function convert_file($file)
+    public static function convert_file(string $file)
     {
-        $ttml = file_get_contents($file);
-        $srt = $this->convert($ttml);
-        $file = str_replace('ttml', 'srt', $file);
-        file_put_contents($file, $srt);
+        $converter = new self();
+        $srt = $converter->convert(file_get_contents($file));
+        $path_info = pathinfo($file);
+        $output_file = files::path_join($path_info['dirname'], $path_info['filename'] . '.srt');
+        if(!file_exists($output_file))
+        {
+            file_put_contents($output_file, $srt);
+            return $output_file;
+        }
+        else
+            throw new exceptions\SubtitleConversionException(sprintf('Output file %s exists', $output_file));
     }
 }
