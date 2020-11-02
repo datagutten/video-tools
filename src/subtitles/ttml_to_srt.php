@@ -80,7 +80,10 @@ class ttml_to_srt
                 if(!$skip_errors)
                     throw $e;
                 else
+                {
                     trigger_error($e->getMessage(), E_USER_WARNING);
+                    continue;
+                }
             }
             $time = sprintf('%s --> %s', $attributes['begin'], substr($end, 0, -3));
             $time = str_replace('.', ',', $time);
