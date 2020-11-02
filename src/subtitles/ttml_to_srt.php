@@ -74,7 +74,14 @@ class ttml_to_srt
         $count = 1;
         foreach ($xml->{'body'}->{'div'}->{'p'} as $line) {
             $attributes = $line->attributes();
-            $end = $this->end_time($attributes['begin'], $attributes['dur']);
+            try {
+                $end = $this->end_time($attributes['begin'], $attributes['dur']);
+            } catch (exceptions\SubtitleConversionException $e) {
+                if(!$skip_errors)
+                    throw $e;
+                else
+                    trigger_error($e->getMessage(), E_USER_WARNING);
+            }
             $time = sprintf('%s --> %s', $attributes['begin'], substr($end, 0, -3));
             $time = str_replace('.', ',', $time);
             $srt .= $count . "\r\n";
