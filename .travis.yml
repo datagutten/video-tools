@@ -12,7 +12,9 @@ matrix:
          install:
             - composer install --no-interaction --ignore-platform-reqs;
       -  os: linux
-         php: '7.3'
+      -  php: '7.1'
+      -  php: '7.2'
+      -  php: '7.3'
       -  php: 'nightly'
          install:
             - composer install --no-interaction --ignore-platform-reqs;
@@ -32,6 +34,9 @@ addons:
       packages:
          - ffmpeg
          - mediainfo
+cache:
+   directories:
+      - $HOME/.cache/composer/files
 
 before_install:
    - bash -c 'echo $TRAVIS_OS_NAME'
