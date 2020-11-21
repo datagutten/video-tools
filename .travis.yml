@@ -18,25 +18,6 @@ jobs:
                - $TRAVIS_BUILD_DIR/tests/test_data
          after_script:
             - ffprobe -show_entries format=duration -i $TRAVIS_BUILD_DIR/tests/test_data/sample.mkv
-      -  os: linux
-         php: '7.1'
-      -  php: '7.2'
-      -  php: '7.3'
-      -  php: 'nightly'
-         install:
-            - composer install --no-interaction --ignore-platform-reqs;
-      -  php: '7.4'
-         after_script:
-            - bash <(curl -s https://codecov.io/bash)
-      -  php: '7.4'
-         name: 'Prefer lowest'
-         install:
-            - composer install --no-interaction
-            - composer update --prefer-lowest
-
-   allow_failures:
-      -  php: 'nightly'
-      -  os: windows
 
 addons:
    apt:
