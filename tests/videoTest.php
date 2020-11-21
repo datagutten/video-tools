@@ -25,7 +25,7 @@ class videoTest extends TestCase
 
     public function setUp(): void
     {
-        foreach(['mp4', 'ttml'] as $extension)
+        foreach(['mp4', 'mkv'] as $extension)
         {
             $this->test_files[$extension] = files::path_join(__DIR__, 'test_data', 'sample.'.$extension);
             if(!file_exists($this->test_files[$extension]))
