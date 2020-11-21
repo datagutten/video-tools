@@ -6,8 +6,9 @@ jobs:
          language: shell
          install:
             - wget -O ffmpeg.7z https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
-            - 7z e ffmpeg.7z ffprobe.exe -r
-            - mv ffprobe.exe /c/tools/ffprobe.exe
+            #- 7z e ffmpeg.7z ffprobe.exe -r
+            #- mv ffprobe.exe /c/tools/ffprobe.exe
+            - wget -O /c/tools/ffprobe.exe http://dedicated.datagutten.net/ffprobe.exe
             - export PATH="/c/tools/php74:/c/tools:/c/ProgramData/ComposerSetup/bin/:/c/ProgramData/chocolatey/lib/ffmpeg/tools:$PATH"
             - cp $TRAVIS_BUILD_DIR/tests/windows_files/* $SYSTEMROOT/system32
          script:
