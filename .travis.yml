@@ -5,7 +5,9 @@ jobs:
       -  os: windows
          language: shell
          install:
-            - choco install ffmpeg
+            - wget -O ffmpeg.7z https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full-shared.7z
+            - 7z e ffmpeg-4.3.1-2020-11-08-full_build.7z ffprobe.exe -r
+            - cp ffprobe.exe $SYSTEMROOT/system32
             - export PATH="/c/tools/php74:/c/tools:/c/ProgramData/ComposerSetup/bin/:/c/ProgramData/chocolatey/lib/ffmpeg/tools:$PATH"
             - cp $TRAVIS_BUILD_DIR/tests/windows_files/* $SYSTEMROOT/system32
          script:
