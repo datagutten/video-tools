@@ -8,8 +8,8 @@ jobs:
             - choco install php --version 7.4
             - choco install composer
             - wget -O ffmpeg.7z https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z
-            - 7z e ffmpeg.7z ffprobe.exe -r
-            - mv ffprobe.exe /c/tools/ffprobe.exe
+            - 7z e ffmpeg.7z *.exe -r
+            - mv *.exe /c/tools/
             - cp $TRAVIS_BUILD_DIR/tests/windows_files/* $SYSTEMROOT/system32
             - export PATH="/c/tools/php74:/c/tools:/c/ProgramData/ComposerSetup/bin/:$PATH"
          install:
@@ -18,8 +18,6 @@ jobs:
             directories:
                - $LOCALAPPDATA/Composer/files
                - $TRAVIS_BUILD_DIR/tests/test_data
-         after_script:
-            - ffprobe -show_entries format=duration -i $TRAVIS_BUILD_DIR/tests/test_data/sample.mkv
       -  os: linux
          php: '7.1'
       -  php: '7.2'
