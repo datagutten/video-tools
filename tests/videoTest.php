@@ -2,6 +2,7 @@
 
 
 use datagutten\tools\files\files;
+use datagutten\video_tools\exceptions\DurationNotFoundException;
 use datagutten\video_tools\video;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
@@ -21,10 +22,6 @@ class videoTest extends TestCase
     {
         parent::__construct($name, $data, $dataName);
         $this->test_file = files::path_join(__DIR__, 'test_data', 'Reklame Kornmo Treider 41.mp4');
-    }
-
-    public function setUp(): void
-    {
         foreach(['mp4', 'mkv'] as $extension)
         {
             $this->test_files[$extension] = files::path_join(__DIR__, 'test_data', 'sample.'.$extension);
@@ -33,10 +30,26 @@ class videoTest extends TestCase
         }
     }
 
-    function testDuration()
+    public function extensionProvider()
     {
-        $duration = video::duration($this->test_file);
-        $this->assertSame(49, $duration);
+        $extensions = [];
+        foreach(array_keys($this->test_files) as $extension)
+        {
+            $extensions[] = [$extension];
+        }
+        return $extensions;
+    }
+
+    /**
+     * @dataProvider extensionProvider
+     * @param $extension
+     * @throws DependencyFailedException
+     * @throws DurationNotFoundException
+     */
+    function testDuration($extension)
+    {
+        $duration = video::duration($this->test_files[$extension]);
+        $this->assertSame(5, $duration);
     }
     function testDurationMediainfo()
     {
