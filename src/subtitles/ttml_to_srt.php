@@ -57,7 +57,7 @@ class ttml_to_srt
 
         $interval->f = '.' . $dur[4];
 
-        return $start->add($interval)->format('H:i:s.u');
+        return $start->add($interval)->format('H:i:s,u');
     }
 
     /**
@@ -86,7 +86,6 @@ class ttml_to_srt
                 }
             }
             $time = sprintf('%s --> %s', $attributes['begin'], substr($end, 0, -3));
-            $time = str_replace('.', ',', $time);
             $srt .= $count . "\r\n";
             $srt .= $time . "\r\n";
 
