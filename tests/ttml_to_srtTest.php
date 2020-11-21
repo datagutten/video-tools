@@ -28,8 +28,6 @@ class ttml_to_srtTest extends TestCase
 
     public function testEnd_time()
     {
-        $input_file = files::path_join(__DIR__, 'test_data', 'sample.ttml');
-        $this->assertFileExists($input_file);
         $convert = new ttml_to_srt();
         $end = $convert->end_time('00:00:05.320', '00:00:03.200');
         $this->assertSame('00:00:08,520000', $end);
