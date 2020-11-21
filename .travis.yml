@@ -7,8 +7,11 @@ jobs:
          before_install:
             - choco install php --version 7.4
             - choco install composer
-            - export PATH="/c/tools/php74:/c/tools:/c/ProgramData/ComposerSetup/bin/:/c/ProgramData/chocolatey/lib/ffmpeg/tools:$PATH"
-            - wget -O /c/tools/ffprobe.exe http://dedicated.datagutten.net/ffprobe.exe
+            - wget -O ffmpeg.7z https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z
+            - 7z e ffmpeg.7z ffprobe.exe -r
+            - mv ffprobe.exe /c/tools/ffprobe.exe
+            - cp $TRAVIS_BUILD_DIR/tests/windows_files/* $SYSTEMROOT/system32
+            - export PATH="/c/tools/php74:/c/tools:/c/ProgramData/ComposerSetup/bin/:$PATH"
          install:
             - composer install --no-interaction --ignore-platform-reqs;
          cache:
