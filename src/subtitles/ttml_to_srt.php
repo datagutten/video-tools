@@ -98,8 +98,15 @@ class ttml_to_srt
                     $string = $line->saveXML();
                     $attributes = $child->attributes();
 
-                    if ($tag === 'span' && $attributes['style'] == 'italic')
-                        $srt .= sprintf("<i>%s</i>\r\n", $child);
+                    if ($tag === 'span')
+                    {
+                        if ($attributes['style'] == 'italic')
+                            $srt .= sprintf("<i>%s</i>\r\n", $child);
+                        else
+                        {
+                            $srt.= $child."\r\n";
+                        }
+                    }
                     elseif ($tag === 'br') {
                         $br = $child->saveXML();
                         if ($child_num === 1 && $line->count() > 1) //Line break is the first child
