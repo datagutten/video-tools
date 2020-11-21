@@ -11,6 +11,10 @@ jobs:
             - export PATH="/c/tools/php74:/c/ProgramData/ComposerSetup/bin/:/c/ProgramData/chocolatey/lib/ffmpeg/tools:$PATH"
          install:
             - composer install --no-interaction --ignore-platform-reqs;
+         cache:
+            directories:
+               - $LOCALAPPDATA/Composer/files
+               - $TRAVIS_BUILD_DIR/tests/test_data
       -  os: linux
          php: '7.1'
       -  php: '7.2'
