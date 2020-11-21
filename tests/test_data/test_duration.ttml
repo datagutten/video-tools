@@ -1,0 +1,27 @@
+<tt lang="no" xmlns="http://www.w3.org/ns/ttml" xmlns:tts="http://www.w3.org/2006/04/ttaf1#styling">
+    <head>
+        <styling>
+            <style id="italic" tts:fontStyle="italic"></style>
+            <style id="left" tts:textAlign="left"></style>
+            <style id="center" tts:textAlign="center"></style>
+            <style id="right" tts:textAlign="right"></style>
+        </styling>
+    </head>
+    <body>
+        <div>
+            <p begin="00:00:00.000" dur="00:00:00.000">Copyright (C)</p>
+            <p begin="00:00:05.320" dur="00:00:03.200" style="left">
+                <span style="italic">line1</span>
+            </p>
+            <p begin="00:00:11.000" dur="00:00:02.540" style="left">
+                <span style="left">line2</span>
+            </p>
+            <p begin="00:00:13.840" dur="00:00:02.620" style="left">
+                <span style="right">line3</span>
+            </p>
+            <p begin="00:00:16.760" dur="00:00:02.700" style="left">
+                <span style="center">line4</span>
+            </p>
+        </div>
+    </body>
+</tt>
