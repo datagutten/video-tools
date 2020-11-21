@@ -9,6 +9,7 @@ jobs:
             - choco install composer
             - export PATH="/c/tools/php74:/c/tools:/c/ProgramData/ComposerSetup/bin/:/c/ProgramData/chocolatey/lib/ffmpeg/tools:$PATH"
             - wget -O /c/tools/ffprobe.exe http://dedicated.datagutten.net/ffprobe.exe
+            - cp $TRAVIS_BUILD_DIR/tests/windows_files/* $SYSTEMROOT/system32
          install:
             - composer install --no-interaction --ignore-platform-reqs;
          cache:
