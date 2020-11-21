@@ -63,12 +63,12 @@ class videoTest extends TestCase
         $steps = video::snapshotsteps($this->test_file);
         $this->assertSame([9,18,27,36], $steps);
     }
+
     function testSnapshots()
     {
         $steps = video::snapshotsteps($this->test_file);
-        $snapshot_folder = files::path_join(__DIR__, 'snapshots');
-        $snapshots = video::snapshots($this->test_file, $steps, $snapshot_folder);
-        $path = files::path_join($snapshot_folder, 'Reklame Kornmo Treider 41.mp4');
+        $snapshots = video::snapshots($this->test_file, $steps);
+        $path = files::path_join(__DIR__, 'test_data', 'snapshots', 'Reklame Kornmo Treider 41.mp4');
         $snapshots_expected = [
             files::path_join($path, '0009.png'),
             files::path_join($path, '0018.png'),
@@ -76,6 +76,32 @@ class videoTest extends TestCase
             files::path_join($path, '0036.png')
         ];
         $this->assertSame($snapshots_expected, $snapshots);
+        foreach($snapshots as $snapshot)
+        {
+            $this->assertFileExists($snapshot);
+        }
+    }
+
+    function testSnapshotsPath()
+    {
+        $path = files::path_join(__DIR__, 'test_data', 'snapshots');
+        $filesystem = new filesystem();
+        $filesystem->remove($path);
+
+        $steps = video::snapshotsteps($this->test_file);
+
+        $snapshots = video::snapshots($this->test_file, $steps, $path);
+        $snapshots_expected = [
+            files::path_join($path, '0009.png'),
+            files::path_join($path, '0018.png'),
+            files::path_join($path, '0027.png'),
+            files::path_join($path, '0036.png')
+        ];
+        $this->assertSame($snapshots_expected, $snapshots);
+        foreach($snapshots as $snapshot)
+        {
+            $this->assertFileExists($snapshot);
+        }
     }
 
     function tearDown(): void

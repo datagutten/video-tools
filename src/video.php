@@ -122,14 +122,14 @@ class video
     /**
      * @param $file
      * @param array $positions Snapshot positions
-     * @param string $snapshot_dir
+     * @param string $output_dir absolute path to a folder where the snapshots are saved
      * @param string $tool Tool to create snapshots
      * @return array Snapshot image files
      * @throws FileNotFoundException File not found
      * @throws DependencyFailedException Tool to make snapshots not found
      * @throws Exception Snapshot creation failed
      */
-	public static function snapshots($file, $positions=array(65,300,600,1000), $snapshot_dir="snapshots/", $tool='')
+	public static function snapshots(string $file, $positions=array(65,300,600,1000), $output_dir='', $tool='')
 	{
         $depend_check = new dependcheck();
 		if(!file_exists($file))
@@ -143,18 +143,20 @@ class video
             $depend_check->depend($tool);
 
 		$snapshots=array();
-		$basename=basename($file);
-		$snapshot_dir=files::path_join($snapshot_dir, $basename);
+		$path_info = pathinfo($file);
+		if(empty($output_dir))
+		    $output_dir = files::path_join($path_info['dirname'], 'snapshots', $path_info['basename']);
 
-		if(!file_exists($snapshot_dir))
-			mkdir($snapshot_dir,0777,true);
+		if(!file_exists($output_dir))
+			mkdir($output_dir,0777,true);
 
 		foreach ($positions as $time)
 		{
 			if($time==3600)
 				$time=3550;
-			$snapshot_file = files::path_join($snapshot_dir, str_pad($time,4,'0',STR_PAD_LEFT).".png");
-			if(!file_exists($snapshot_file))
+
+			$snapshot_file = files::path_join($output_dir, str_pad($time,4,'0',STR_PAD_LEFT).".png");
+            if(!file_exists($snapshot_file))
 			{
 				if($tool=='mplayer') //Create snapshots using mplayer
 				{
