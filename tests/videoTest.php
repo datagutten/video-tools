@@ -12,11 +12,25 @@ class videoTest extends TestCase
      * @var string
      */
     private $test_file;
+    /**
+     * @var array
+     */
+    private $test_files;
 
     function __construct(?string $name = null, array $data = [], $dataName = '')
     {
         parent::__construct($name, $data, $dataName);
         $this->test_file = files::path_join(__DIR__, 'test_data', 'Reklame Kornmo Treider 41.mp4');
+    }
+
+    public function setUp(): void
+    {
+        foreach(['mp4', 'ttml'] as $extension)
+        {
+            $this->test_files[$extension] = files::path_join(__DIR__, 'test_data', 'sample.'.$extension);
+            if(!file_exists($this->test_files[$extension]))
+                copy('http://techslides.com/demos/samples/sample.'.$extension, $this->test_files[$extension]);
+        }
     }
 
     function testDuration()
