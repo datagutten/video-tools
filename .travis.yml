@@ -1,9 +1,9 @@
 language: php
 
-matrix:
+jobs:
    include:
       -  os: windows
-         language: sh
+         language: shell
          before_install:
             - choco install php --version 7.4
             - choco install composer
@@ -12,7 +12,7 @@ matrix:
          install:
             - composer install --no-interaction --ignore-platform-reqs;
       -  os: linux
-      -  php: '7.1'
+         php: '7.1'
       -  php: '7.2'
       -  php: '7.3'
       -  php: 'nightly'
