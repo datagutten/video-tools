@@ -37,10 +37,12 @@ class ttml_to_srt
      * @return string End time
      * @throws exceptions\SubtitleConversionException
      */
-    public function end_time($start, $duration)
+    public function end_time(string $start, string $duration)
     {
         $date = $this->datetime;
-        $start = $date->createFromFormat('H:i:s.u', $start);
+        $start_time = $date->createFromFormat('H:i:s.u', $start);
+        if($start_time===false)
+            throw new exceptions\SubtitleConversionException('Invalid start time');
 
         if(!preg_match('/([0-9]+):([0-9]+):([0-9]+)\.([0-9]+)/', $duration, $dur))
             throw new exceptions\SubtitleConversionException('Unable to parse duration: '.$duration);
@@ -57,7 +59,7 @@ class ttml_to_srt
 
         $interval->f = '.' . $dur[4];
 
-        return $start->add($interval)->format('H:i:s,u');
+        return $start_time->add($interval)->format('H:i:s,u');
     }
 
     /**
@@ -81,7 +83,7 @@ class ttml_to_srt
                     throw $e;
                 else
                 {
-                    trigger_error($e->getMessage(), E_USER_WARNING);
+                    //trigger_error($e->getMessage(), E_USER_WARNING);
                     continue;
                 }
             }

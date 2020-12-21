@@ -42,8 +42,12 @@ class ttml_to_srtTest extends TestCase
         $this->assertStringContainsString('00:00:05.320 --> 00:00:08,520', $srt);
     }
 
-/*    public function testConvertWithErrors()
+    public function testConvertInvalidDuration()
     {
-
-    }*/
+        $convert = new ttml_to_srt();
+        $input_file = files::path_join(__DIR__, 'test_data', 'test_invalid_duration.ttml');
+        $ttml = file_get_contents($input_file);
+        $srt = $convert->convert($ttml);
+        $this->assertStringContainsString('00:39:52.640 --> 00:39:57,420', $srt);
+    }
 }

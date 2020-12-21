@@ -1,0 +1,17 @@
+<tt lang="no" xmlns="http://www.w3.org/ns/ttml" xmlns:tts="http://www.w3.org/2006/04/ttaf1#styling">
+    <head>
+        <styling>
+            <style id="italic" tts:fontStyle="italic"></style>
+            <style id="left" tts:textAlign="left"></style>
+            <style id="center" tts:textAlign="center"></style>
+            <style id="right" tts:textAlign="right"></style>
+        </styling>
+    </head>
+    <body>
+        <div>
+            <p begin="00:39:52.640" dur="00:00:04.780" style="left">line1</p>
+            <p begin="00:39:57.720" dur="00:-39:-58.-20" style="left">line2<br />line3</p>
+            <p begin="655:35:00.-296" dur="00:00:00.000" style="left"></p>
+        </div>
+    </body>
+</tt>
