@@ -75,14 +75,6 @@ class video
 		{
             $depend_check->depend('mediainfo');
             $duration_ms = trim(shell_exec("mediainfo --Inform=\"General;%Duration%\" \"$file\""));
-            /*$process = new Process(['mediainfo', '--Inform="General;%Duration%"', $file]);
-            $process->run();
-            if (!$process->isSuccessful()) {
-                throw new exceptions\DurationNotFoundException('Error', 0, new ProcessFailedException($process));
-            }
-
-            $duration_ms = trim($process->getOutput());
-            var_dump($duration_ms);*/
 			$duration=(int)floor($duration_ms/1000);
 			if(empty($duration))
 				throw new exceptions\DurationNotFoundException('Unable to get duration using mediainfo');

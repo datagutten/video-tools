@@ -129,7 +129,6 @@ class video_download
      * @param bool mkvmerge Merge the downloaded file to mkv
      * @param int $loglevel ffmpeg log level
      * @return string
-     * @throws exceptions\DownloadFailedException
      * @throws FileNotFoundException
      * @throws DependencyFailedException
      * @throws exceptions\DurationNotFoundException
