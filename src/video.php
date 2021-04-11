@@ -175,5 +175,21 @@ class video
 		if(empty($snapshots))
 			$snapshots=false;
 		return $snapshots;
-	}	
+	}
+
+    /**
+     * Parse season and episode string
+     * @param string $episode_string
+     * @return array
+     */
+    public static function parse_episode(string $episode_string)
+    {
+        preg_match('/(?:S([0-9]+))?(?:EP?([0-9]+))?/', $episode_string, $matches);
+        if (!empty($matches[1]) && !empty($matches[2]))
+            return ['season' => intval($matches[1]), 'episode' => intval($matches[2])];
+        elseif ($matches[0][0] == 'S')
+            return ['season' => intval($matches[1])];
+        elseif ($matches[0][0] == 'E')
+            return ['episode' => intval($matches[2])];
+    }
 }

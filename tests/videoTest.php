@@ -104,6 +104,13 @@ class videoTest extends TestCase
         }
     }
 
+    function testParseEpisode()
+    {
+        $this->assertSame(['season' => 1, 'episode' => 2], video::parse_episode('S01E02'));
+        $this->assertSame(['season' => 1], video::parse_episode('S01'));
+        $this->assertSame(['episode' => 1], video::parse_episode('EP01'));
+    }
+
     function tearDown(): void
     {
         $filesystem = new Filesystem();
