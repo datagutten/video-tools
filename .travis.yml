@@ -5,6 +5,7 @@ jobs:
       -  os: windows
          language: shell
          before_install:
+            - choco config set cacheLocation $HOME/choco_cache
             - choco install php --version 7.4
             - choco install composer
             - wget -O ffmpeg.7z https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z
@@ -18,6 +19,7 @@ jobs:
             directories:
                - $LOCALAPPDATA/Composer/files
                - $TRAVIS_BUILD_DIR/tests/test_data
+               - $HOME/choco_cache
       -  os: linux
          php: '7.1'
       -  php: '7.2'
