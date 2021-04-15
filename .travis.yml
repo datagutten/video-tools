@@ -6,13 +6,13 @@ jobs:
          language: shell
          before_install:
             - choco config set cacheLocation $HOME/choco_cache
-            - choco install php --version 7.4 --no-progress
-            - choco install composer --no-progress
+            - choco install --no-progress tests/packages.config
             - wget -O ffmpeg.7z https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z
             - 7z e ffmpeg.7z *.exe -r
             - mv *.exe /c/tools/
             - cp $TRAVIS_BUILD_DIR/tests/windows_files/* $SYSTEMROOT/system32
-            - export PATH="/c/tools/php74:/c/tools:/c/ProgramData/ComposerSetup/bin/:$PATH"
+            - export PATH="/c/tools/php80:/c/tools:/c/ProgramData/ComposerSetup/bin/:$PATH"
+            - wget -q -O /c/tools/php80/php.ini https://raw.githubusercontent.com/datagutten/tools/master/tests/php-test.ini
          install:
             - composer install --no-interaction
          cache:
