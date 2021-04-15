@@ -6,15 +6,15 @@ jobs:
          language: shell
          before_install:
             - choco config set cacheLocation $HOME/choco_cache
-            - choco install php --version 7.4
-            - choco install composer
+            - choco install php --version 7.4 --no-progress
+            - choco install composer --no-progress
             - wget -O ffmpeg.7z https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-full.7z
             - 7z e ffmpeg.7z *.exe -r
             - mv *.exe /c/tools/
             - cp $TRAVIS_BUILD_DIR/tests/windows_files/* $SYSTEMROOT/system32
             - export PATH="/c/tools/php74:/c/tools:/c/ProgramData/ComposerSetup/bin/:$PATH"
          install:
-            - composer install --no-interaction --ignore-platform-reqs;
+            - composer install --no-interaction
          cache:
             directories:
                - $LOCALAPPDATA/Composer/files
@@ -24,13 +24,9 @@ jobs:
          php: '7.1'
       -  php: '7.2'
       -  php: '7.3'
-      -  php: 'nightly'
-         install:
-            - composer install --no-interaction --ignore-platform-reqs;
       -  php: '7.4'
-         after_script:
-            - bash <(curl -s https://codecov.io/bash)
       -  php: '8.0'
+      -  php: 'nightly'
       -  php: '7.4'
          name: 'Prefer lowest'
          install:
@@ -39,7 +35,6 @@ jobs:
 
    allow_failures:
       -  php: 'nightly'
-      -  os: windows
 
 addons:
    apt:
@@ -67,3 +62,6 @@ before_script:
 
 script:
    - vendor/bin/phpunit
+
+after_script:
+  - bash <(curl -s https://codecov.io/bash)
