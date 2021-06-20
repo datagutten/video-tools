@@ -15,9 +15,9 @@ jobs:
         os: [ ubuntu-latest, windows-latest ]
         include:
           - os: ubuntu-latest
-            run: sudo apt-get install ffmpeg
+            ffmpeg_install: sudo apt-get install ffmpeg
           - os: windows-latest
-            run: choco install ffmpeg
+            ffmpeg_install: choco install ffmpeg
 
     steps:
     - uses: actions/checkout@v2
@@ -40,6 +40,9 @@ jobs:
         php-version: ${{ matrix.php }}
         coverage: xdebug
         extensions: libxml gd pdo
+
+    - name: Install ffmpeg
+      run: ${{ matrix.ffmpeg_install }}
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
