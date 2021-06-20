@@ -39,7 +39,7 @@ jobs:
       with:
         php-version: ${{ matrix.php }}
         coverage: xdebug
-        extensions: libxml gd pdo
+        extensions: libxml, gd, pdo
 
     - name: Install ffmpeg
       run: ${{ matrix.ffmpeg_install }}
@@ -62,7 +62,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           coverage: xdebug
-          extensions: libxml gd pdo
+          extensions: libxml, gd, pdo
 
       - name: Install ffmpeg
         run: sudo apt-get install ffmpeg
