@@ -26,9 +26,12 @@ jobs:
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
 
+  - name: Set chocolatey cache path
+    if: ${{ runner.os == 'Windows' }}
+    run: choco config set cacheLocation $HOME/choco_cache
+
    - name: Cache Chocolatey packages
      id: choco-cache
-     run: choco config set cacheLocation $HOME/choco_cache
      uses: actions/cache@v2
      if: ${{ runner.os == 'Windows' }}
      path: ~/choco_cache
