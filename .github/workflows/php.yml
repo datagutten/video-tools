@@ -34,7 +34,8 @@ jobs:
         id: choco-cache
         uses: actions/cache@v2
         if: ${{ runner.os == 'Windows' }}
-        path: ~/choco_cache
+        with:
+          path: ~/choco_cache
 
       - name: Cache Composer packages
         id: composer-cache
