@@ -23,7 +23,10 @@ jobs:
           - os: windows-latest
             ffmpeg_install: choco install --no-progress ffmpeg
           - php: nightly
-            os: [ ubuntu-latest, windows-latest ]
+            os: ubuntu-latest
+            experimental: true
+          - php: nightly
+            os: windows-latest
             experimental: true
 
     steps:
