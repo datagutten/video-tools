@@ -16,6 +16,8 @@ jobs:
         include:
           - os: ubuntu-latest
             run: sudo apt-get install ffmpeg
+          - os: windows-latest
+            run: choco install ffmpeg
 
     steps:
     - uses: actions/checkout@v2
