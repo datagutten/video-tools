@@ -14,8 +14,8 @@ jobs:
         php: [ '7.1', '7.2', '7.3', '7.4', '8.0', 'latest' ]
         os: [ ubuntu-latest, windows-latest ]
         include:
-          os: ubuntu-latest
-          run: sudo apt-get install ffmpeg
+          - os: ubuntu-latest
+            run: sudo apt-get install ffmpeg
 
     steps:
     - uses: actions/checkout@v2
