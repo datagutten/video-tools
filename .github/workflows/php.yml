@@ -64,6 +64,9 @@ jobs:
           coverage: xdebug
           extensions: libxml gd pdo
 
+      - name: Install ffmpeg
+        run: sudo apt-get install ffmpeg
+
       - name: Install dependencies
         run: composer update --prefer-lowest --no-progress
 
