@@ -16,7 +16,7 @@ jobs:
         os: [ ubuntu-latest, windows-latest ]
         include:
           - os: ubuntu-latest
-            ffmpeg_install: sudo apt-get install ffmpeg
+            ffmpeg_install: sudo apt-get install ffmpeg mediainfo
           - os: windows-latest
             ffmpeg_install: choco install --no-progress ffmpeg
 
