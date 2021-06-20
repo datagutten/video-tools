@@ -32,18 +32,6 @@ jobs:
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
-      - name: Set chocolatey cache path
-        if: ${{ runner.os == 'Windows' }}
-        run: choco config set cacheLocation $HOME/choco_cache
-
-      - name: Cache Chocolatey packages
-        id: choco-cache
-        uses: actions/cache@v2
-        if: ${{ runner.os == 'Windows' }}
-        with:
-          path: ~/choco_cache
-          key: chocolatey
-
       - name: Cache Composer packages
         id: composer-cache
         uses: actions/cache@v2
@@ -53,15 +41,15 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-php${{ matrix.php }}-
 
+      - name: Install ffmpeg
+        run: ${{ matrix.ffmpeg_install }}
+
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
           extensions: libxml, gd, pdo
-
-      - name: Install ffmpeg
-        run: ${{ matrix.ffmpeg_install }}
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
