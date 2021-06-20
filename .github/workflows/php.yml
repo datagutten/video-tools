@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.experimental }}
+
     strategy:
       fail-fast: false
       matrix:
@@ -19,6 +21,8 @@ jobs:
             ffmpeg_install: sudo apt-get install ffmpeg mediainfo
           - os: windows-latest
             ffmpeg_install: choco install --no-progress ffmpeg
+          - php: nightly
+            experimental: true
 
     steps:
       - uses: actions/checkout@v2
