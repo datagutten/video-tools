@@ -55,7 +55,12 @@ jobs:
           extensions: libxml, gd, pdo
 
       - name: Install dependencies
+        if:  ${{ matrix.experimental == false }}
         run: composer install --prefer-dist --no-progress
+
+      - name: Install dependencies
+        if:  ${{ matrix.experimental == true }}
+        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
 
       - name: Run tests
         run: composer run-script test
