@@ -21,48 +21,48 @@ jobs:
             ffmpeg_install: choco install --no-progress ffmpeg
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
 
-  - name: Set chocolatey cache path
-    if: ${{ runner.os == 'Windows' }}
-    run: choco config set cacheLocation $HOME/choco_cache
+      - name: Set chocolatey cache path
+        if: ${{ runner.os == 'Windows' }}
+        run: choco config set cacheLocation $HOME/choco_cache
 
-   - name: Cache Chocolatey packages
-     id: choco-cache
-     uses: actions/cache@v2
-     if: ${{ runner.os == 'Windows' }}
-     path: ~/choco_cache
+      - name: Cache Chocolatey packages
+        id: choco-cache
+        uses: actions/cache@v2
+        if: ${{ runner.os == 'Windows' }}
+        path: ~/choco_cache
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php${{ matrix.php }}-
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php${{ matrix.php }}-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-
 
-    - name: Setup PHP with Xdebug
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php }}
-        coverage: xdebug
-        extensions: libxml, gd, pdo
+      - name: Setup PHP with Xdebug
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+          extensions: libxml, gd, pdo
 
-    - name: Install ffmpeg
-      run: ${{ matrix.ffmpeg_install }}
+      - name: Install ffmpeg
+        run: ${{ matrix.ffmpeg_install }}
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
 
-    - name: Run default tests
-      run: vendor/bin/phpunit
+      - name: Run default tests
+        run: vendor/bin/phpunit
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
 
   prefer_lowest:
     name: 'Prefer lowest dependency versions'
