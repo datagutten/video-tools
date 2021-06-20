@@ -36,6 +36,7 @@ jobs:
         if: ${{ runner.os == 'Windows' }}
         with:
           path: ~/choco_cache
+          key: chocolatey
 
       - name: Cache Composer packages
         id: composer-cache
