@@ -87,7 +87,10 @@ class ttml_to_srt
                     continue;
                 }
             }
-            $time = sprintf('%s --> %s', $attributes['begin'], substr($end, 0, -3));
+            $time = sprintf('%s --> %s',
+                str_replace('.', ',', $attributes['begin']),
+                substr($end, 0, -3)
+            );
             $srt .= $count . "\r\n";
             $srt .= $time . "\r\n";
 
