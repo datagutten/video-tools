@@ -20,7 +20,11 @@
             "datagutten\\video_tools\\": "src"
         }
     },
-    "bin": ["ttml_to_srt_cli.php", "vtt_to_srt_cli.php", "scripts/mkvmerge"],
+    "bin": [
+        "scripts/ttml_to_srt",
+        "scripts/vtt_to_srt",
+        "scripts/mkvmerge"
+    ],
     "require-dev": {
         "phpunit/phpunit": "^7.5|^8|^9",
         "symfony/filesystem": "^4.3|^5"
