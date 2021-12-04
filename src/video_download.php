@@ -15,6 +15,7 @@ class video_download
      *
      * @param $program
      * @return array
+     * @deprecated Use EpisodeFormat class
      */
     public static function season_episode($program)
     {
