@@ -2,14 +2,14 @@
 
 namespace datagutten\video_tools;
 
+use ArrayAccess;
 use datagutten\tools\files\files;
 use DateTimeImmutable;
-use function PHPUnit\Framework\returnArgument;
 
 /**
  * Format season and episode
  */
-class EpisodeFormat implements \ArrayAccess
+class EpisodeFormat implements ArrayAccess
 {
     /**
      * @var string Series name
