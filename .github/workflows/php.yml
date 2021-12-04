@@ -19,7 +19,9 @@ jobs:
         experimental: [ false ]
         include:
           - os: ubuntu-latest
-            ffmpeg_install: sudo apt-get install ffmpeg mediainfo
+            ffmpeg_install: |
+              sudo apt-get update
+              sudo apt-get install ffmpeg mediainfo
           - os: windows-latest
             ffmpeg_install: choco install --no-progress ffmpeg
           - php: 8.1
