@@ -98,7 +98,7 @@ class EpisodeFormat implements ArrayAccess
     public function folder(): string
     {
         $folder = sprintf('%s %s', $this->series_name(), $this->season_format());
-        return filnavn($folder);
+        return filnavn(trim($folder));
     }
 
     public function file_path($extension = ''): string
