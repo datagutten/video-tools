@@ -18,16 +18,10 @@ jobs:
         os: [ ubuntu-latest, windows-latest ]
         experimental: [ false ]
         include:
-          - os: ubuntu-latest
-            ffmpeg_install: |
-              sudo apt-get update
-              sudo apt-get install ffmpeg mediainfo
-          - os: windows-latest
-            ffmpeg_install: choco install --no-progress ffmpeg
-          - php: 8.1
+          - php: 'nightly'
             os: ubuntu-latest
             experimental: true
-          - php: 8.1
+          - php: 'nightly'
             os: windows-latest
             experimental: true
 
@@ -47,7 +41,14 @@ jobs:
             ${{ runner.os }}-php${{ matrix.php }}-
 
       - name: Install ffmpeg
-        run: ${{ matrix.ffmpeg_install }}
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install ffmpeg mediainfo
+
+      - name: Install ffmpeg
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: choco install --no-progress ffmpeg
 
       - name: Setup PHP with Xdebug
         uses: shivammathur/setup-php@v2
@@ -82,7 +83,9 @@ jobs:
           extensions: libxml, gd, pdo
 
       - name: Install ffmpeg
-        run: sudo apt-get install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install ffmpeg
 
       - name: Install dependencies
         run: composer update --prefer-lowest --no-progress
