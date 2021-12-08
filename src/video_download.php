@@ -129,13 +129,14 @@ class video_download
      * @param null $duration Expected duration, used for verifying the downloaded file
      * @param bool mkvmerge Merge the downloaded file to mkv
      * @param int $loglevel ffmpeg log level
+     * @param string $extension Extension to append to the file name
      * @return string
      * @throws FileNotFoundException
      * @throws DependencyFailedException
      * @throws exceptions\DurationNotFoundException
      * @throws exceptions\WrongDurationException
      */
-    public static function ffmpeg_download($stream, $file, $duration = null, $mkvmerge = true, $loglevel = 16)
+    public static function ffmpeg_download($stream, $file, $duration = null, $mkvmerge = true, $loglevel = 16, $extension = 'mp4')
     {
         $check = new video_duration_check;
         if (!empty($duration)) {
@@ -149,8 +150,9 @@ class video_download
                 echo $e->getMessage() . "\n";
             }
         }
+        if (!empty($extension))
+            $file = $file . '.' . $extension;
 
-        $file = $file . '.mp4';
         printf("Downloading to %s\n", $file);
 
         $cmd = sprintf('ffmpeg -loglevel %d -i "%s" -c copy "%s" 2>&1', $loglevel, $stream, $file); //loglevel 8=fatal
