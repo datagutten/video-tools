@@ -37,6 +37,25 @@ class EpisodeFormatTest extends TestCase
         $this->assertEquals('TV Show (2021)', $episode->episode_name());
     }
 
+    public function testNamedEpisode()
+    {
+        $episode = new EpisodeFormat();
+        $episode->series = 'Test Series';
+        $episode->title = 'Episode Name';
+        $this->assertEquals('Test Series Episode Name', $episode->episode_name());
+    }
+
+    public function testEpisodeNumber()
+    {
+        $episode = new EpisodeFormat();
+        $episode->episode = 1;
+        $episode->season = 2;
+        $episode->series = 'Test Series';
+        $episode->title = 'Episode name';
+        $this->assertEquals('S02E01 - Episode name', $episode->episode_number());
+        $this->assertEquals('S02E01', $episode->episode_number(false));
+    }
+
     public function testEpisodeWithTitle()
     {
         $episode = new EpisodeFormat();

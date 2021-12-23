@@ -73,18 +73,25 @@ class EpisodeFormat implements ArrayAccess
         return $season;
     }
 
-    public function episode_name(): string
+    public function episode_number($episode_name = true): string
     {
         $name = $this->season_format();
         if (!empty($this->episode))
             $name .= sprintf('%s%02d', $this->episode_prefix, $this->episode);
 
-        if (!empty($this->title))
+        if (!empty($this->title) && !empty($this->series) && $episode_name)
             if (!empty($name)) //Append episode title
-                $name = sprintf('%s - %s', $name, $this->title);
+                return sprintf('%s - %s', $name, $this->title);
+            else
+                return $this->title;
+        else
+            return $name;
+    }
 
+    public function episode_name(): string
+    {
         //Prepend series name
-        return trim(sprintf('%s %s', $this->series_name(), $name));
+        return trim(sprintf('%s %s', $this->series_name(), $this->episode_number()));
     }
 
     public function file_name(string $extension = '')
