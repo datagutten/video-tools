@@ -108,9 +108,16 @@ class EpisodeFormat implements ArrayAccess
         return filnavn(trim($folder));
     }
 
-    public function file_path($extension = ''): string
+    public function file_path($extension = '', string $base_path = '', bool $create_folder = false): string
     {
-        return files::path_join($this->folder(), $this->file_name($extension));
+        if (!empty($base_path))
+            $folder = files::path_join($base_path, $this->folder());
+        else
+            $folder = $this->folder();
+
+        if ($create_folder && !file_exists($folder))
+            mkdir($folder, 0777, true);
+        return files::path_join($folder, $this->file_name($extension));
     }
 
     public function offsetExists($offset): bool

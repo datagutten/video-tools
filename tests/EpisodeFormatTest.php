@@ -1,5 +1,6 @@
 <?php
 
+use datagutten\tools\files\files;
 use datagutten\video_tools\EpisodeFormat;
 use PHPUnit\Framework\TestCase;
 
@@ -110,6 +111,24 @@ class EpisodeFormatTest extends TestCase
         $episode->season = 2;
         $episode->series = 'Test Series';
         $this->assertEquals(sprintf('Test Series S02%sTest Series S02E01.mkv', DIRECTORY_SEPARATOR), $episode->file_path('mkv'));
+    }
+
+    public function testCreateFolder()
+    {
+        $episode = new EpisodeFormat();
+        $episode->episode = 1;
+        $episode->season = 2;
+        $episode->series = 'Test Series';
+
+        $base_path = files::path_join(sys_get_temp_dir(), 'episode_test');
+        $filesystem = new Symfony\Component\Filesystem\Filesystem();
+        $filesystem->remove($base_path);
+
+        $path = $episode->file_path('mkv', $base_path);
+        $this->assertFileDoesNotExist(dirname($path));
+        $path = $episode->file_path('mkv', $base_path, true);
+        $this->assertFileExists(dirname($path));
+        $filesystem->remove($base_path);
     }
 
     public function testArrayAccess()
