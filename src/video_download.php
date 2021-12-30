@@ -7,6 +7,7 @@ use dependcheck;
 use DependencyFailedException;
 use FileNotFoundException;
 use InvalidArgumentException;
+use Symfony\Component\Process\Process;
 
 class video_download
 {
@@ -171,5 +172,20 @@ class video_download
         }
 
         return $file;
+    }
+
+    public static function ffmpeg($input_file, $output, $codec = null, $run = true)
+    {
+        $cmd = ['ffmpeg', '-i', $input_file];
+        if ($codec)
+            $cmd += ['-c', $codec];
+
+        $cmd[] = $output;
+
+        $process = new Process($cmd);
+        if ($run)
+            return $process->run();
+        else
+            return $process;
     }
 }
