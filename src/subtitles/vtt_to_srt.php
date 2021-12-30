@@ -39,9 +39,10 @@ class vtt_to_srt extends srt
      * @param string $file VTT file
      * @param bool $overwrite Overwrite output SRT file
      */
-    public function convert_file($file, $overwrite = false)
+    public static function convert_file($file, $overwrite = false)
     {
-        $this->convert(file_get_contents($file));
-        $this->save_file($file, $overwrite);
+        $converter = new static();
+        $converter->convert(file_get_contents($file));
+        return $converter->save_file($file, $overwrite);
     }
 }

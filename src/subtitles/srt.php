@@ -40,5 +40,6 @@ class srt
         if(!file_exists($filename) || $overwrite)
             file_put_contents($filename, $this->sub);
 
+        return $filename;
     }
 }
