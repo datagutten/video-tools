@@ -38,8 +38,10 @@ class srt
             $filename = sprintf('%s/%s.srt', $pathinfo['dirname'], $pathinfo['filename']);
 
         if(!file_exists($filename) || $overwrite)
+        {
             file_put_contents($filename, $this->sub);
-
-        return $filename;
+            return $filename;
+        }
+        return null;
     }
 }
