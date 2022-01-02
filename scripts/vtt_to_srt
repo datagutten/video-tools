@@ -3,6 +3,7 @@
 //find -name \*.no.vtt -exec php /home/video-tools/scripts/vtt_to_srt {} \;
 use datagutten\video_tools\subtitles\vtt_to_srt;
 
-require __DIR__.'/loader.php';
-$convert = new vtt_to_srt();
-$convert->convert_file($argv[1]);
+require __DIR__ . '/loader.php';
+$file = vtt_to_srt::convert_file($argv[1]);
+if (!empty($file))
+    printf("%s converted to %s\n", basename($argv[1]), basename($file));
