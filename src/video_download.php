@@ -182,7 +182,7 @@ class video_download
 
         $cmd[] = $output;
 
-        $process = new Process($cmd);
+        $process = new Process($cmd, null, null, null, null);
         if ($run)
             return $process->run();
         else
