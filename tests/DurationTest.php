@@ -1,6 +1,9 @@
 <?php
 
+namespace datagutten\video_tools\tests;
+
 use datagutten\video_tools\video_duration_check;
+use FileNotFoundException;
 use PHPUnit\Framework\TestCase;
 use datagutten\video_tools\VideoTestData;
 use datagutten\video_tools\exceptions;

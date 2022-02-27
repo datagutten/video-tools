@@ -1,5 +1,6 @@
 <?php
 
+namespace datagutten\video_tools\tests;
 
 use datagutten\tools\files\files;
 use datagutten\video_tools\exceptions\SubtitleConversionException;
@@ -15,7 +16,7 @@ class ttml_to_srtTest extends TestCase
     public function testConvert_file()
     {
         $expected_output_file = files::path_join(__DIR__, 'test_data', 'test_duration.srt');
-        if(file_exists($expected_output_file))
+        if (file_exists($expected_output_file))
             unlink($expected_output_file);
 
         $input_file = files::path_join(__DIR__, 'test_data', 'test_duration.ttml');

@@ -1,5 +1,6 @@
 <?php
 
+namespace datagutten\video_tools\tests;
 
 use datagutten\tools\files\files;
 use datagutten\video_tools\exceptions\DurationNotFoundException;

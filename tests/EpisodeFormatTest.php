@@ -1,8 +1,11 @@
 <?php
 
+namespace datagutten\video_tools\tests;
+
 use datagutten\tools\files\files;
 use datagutten\video_tools\EpisodeFormat;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
 
 class EpisodeFormatTest extends TestCase
 {
@@ -121,7 +124,7 @@ class EpisodeFormatTest extends TestCase
         $episode->series = 'Test Series';
 
         $base_path = files::path_join(sys_get_temp_dir(), 'episode_test');
-        $filesystem = new Symfony\Component\Filesystem\Filesystem();
+        $filesystem = new Filesystem();
         $filesystem->remove($base_path);
 
         $path = $episode->file_path('mkv', $base_path);
