@@ -20,6 +20,11 @@
             "datagutten\\video_tools\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "datagutten\\video_tools\\tests": "tests"
+        }
+    },
     "bin": [
         "scripts/ttml_to_srt",
         "scripts/vtt_to_srt",
