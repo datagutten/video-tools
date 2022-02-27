@@ -22,7 +22,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "datagutten\\video_tools\\tests": "tests"
+            "datagutten\\video_tools\\tests\\": "tests"
         }
     },
     "bin": [
