@@ -191,5 +191,7 @@ class video
             return ['season' => intval($matches[1])];
         elseif ($matches[0][0] == 'E')
             return ['episode' => intval($matches[2])];
+		else
+			throw new InvalidArgumentException('Unable to parse episode string');
     }
 }
