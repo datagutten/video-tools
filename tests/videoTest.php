@@ -41,6 +41,18 @@ class videoTest extends TestCase
         return $extensions;
     }
 
+    public function testSeconds_to_time()
+    {
+        $time = video::seconds_to_time(80);
+        $this->assertEquals('00:01:20', $time);
+
+        $time = video::seconds_to_time(90);
+        $this->assertEquals('00:01:30', $time);
+
+        $time = video::seconds_to_time(3680);
+        $this->assertEquals('01:01:20', $time);
+    }
+
     /**
      * @dataProvider extensionProvider
      * @param $extension

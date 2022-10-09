@@ -40,7 +40,7 @@ class video
      */
 	public static function seconds_to_time($seconds)
 	{
-		return sprintf('%02d:%02d:%02d',floor($seconds/3600),floor(($seconds/60) % 60),$seconds % 60);
+		return sprintf('%02d:%02d:%02d',floor($seconds/3600),floor(intval($seconds/60) % 60),intval($seconds % 60));
 	}
 
 	/**
