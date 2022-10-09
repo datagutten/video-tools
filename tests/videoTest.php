@@ -23,18 +23,18 @@ class videoTest extends TestCase
     {
         parent::__construct($name, $data, $dataName);
         $this->test_file = files::path_join(__DIR__, 'test_data', 'Reklame Kornmo Treider 41.mp4');
-        foreach(['mp4', 'mkv'] as $extension)
+        foreach (['mp4', 'mkv'] as $extension)
         {
-            $this->test_files[$extension] = files::path_join(__DIR__, 'test_data', 'sample.'.$extension);
-            if(!file_exists($this->test_files[$extension]))
-                copy('http://techslides.com/demos/samples/sample.'.$extension, $this->test_files[$extension]);
+            $this->test_files[$extension] = files::path_join(__DIR__, 'test_data', 'sample.' . $extension);
+            if (!file_exists($this->test_files[$extension]))
+                copy('http://techslides.com/demos/samples/sample.' . $extension, $this->test_files[$extension]);
         }
     }
 
     public function extensionProvider()
     {
         $extensions = [];
-        foreach(array_keys($this->test_files) as $extension)
+        foreach (array_keys($this->test_files) as $extension)
         {
             $extensions[] = [$extension];
         }
@@ -52,9 +52,10 @@ class videoTest extends TestCase
         $duration = video::duration($this->test_files[$extension]);
         $this->assertSame(5, $duration);
     }
+
     function testDurationMediainfo()
     {
-        if(PHP_OS=='WINNT')
+        if (PHP_OS == 'WINNT')
             $this->markTestSkipped('mediainfo does not work on windows');
         $duration = video::duration($this->test_file, 'mediainfo');
         $this->assertSame(49, $duration);
