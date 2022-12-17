@@ -156,9 +156,9 @@ class video_download
 
         printf("Downloading to %s\n", $file);
 
-        $cmd = sprintf('ffmpeg -loglevel %d -i "%s" -c copy "%s" 2>&1', $loglevel, $stream, $file); //loglevel 8=fatal
+        $process = static::ffmpeg($stream, $file, 'copy', $loglevel);
 
-        echo shell_exec($cmd);
+        echo $process->getOutput();
 
         if (!empty($duration)) {
             $check->check_file_duration($file, $duration);
@@ -174,11 +174,13 @@ class video_download
         return $file;
     }
 
-    public static function ffmpeg($input_file, $output, $codec = null, $run = true)
+    public static function ffmpeg($input_file, $output, $codec = null, $run = true, int $loglevel = null)
     {
         $cmd = ['ffmpeg', '-i', $input_file];
         if ($codec)
             $cmd += ['-c', $codec];
+        if (!empty($loglevel))
+            $cmd += ['-loglevel', $loglevel];
 
         $cmd[] = $output;
 
