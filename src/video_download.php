@@ -174,7 +174,7 @@ class video_download
         return $file;
     }
 
-    public static function ffmpeg($input_file, $output, $codec = null, $run = true, int $loglevel = null)
+    public static function ffmpeg($input_file, $output, $codec = null, $run = true, int $loglevel = null): Process
     {
         $cmd = ['ffmpeg', '-i', $input_file];
         if ($codec)
@@ -186,8 +186,7 @@ class video_download
 
         $process = new Process($cmd, null, null, null, null);
         if ($run)
-            return $process->run();
-        else
-            return $process;
+            $process->run();
+        return $process;
     }
 }
