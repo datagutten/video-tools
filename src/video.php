@@ -194,4 +194,24 @@ class video
 		else
 			throw new InvalidArgumentException('Unable to parse episode string');
     }
+
+    /**
+     * Convert an array of points to the format used by mkverge --chapters argument
+     * @param array $points Each array value should be an array with a string title as the first element, and the interval as the second
+     * @return string mkvmerge chapters
+     */
+    public static function mkvmerge_chapters(array $points): string
+    {
+        $chapters = '';
+        foreach ($points as $pointKey => $point)
+        {
+            list($title, $interval) = $point;
+
+            $point = sprintf("%s:%'.03d", $interval->format('%H:%I:%S'), $interval->f * 1000) . "\r\n";
+
+            $chapters .= sprintf("CHAPTER%02d=%s\r\n", $pointKey + 1, $point);
+            $chapters .= sprintf("CHAPTER%02dNAME=%s\r\n", $pointKey + 1, $title);
+        }
+        return $chapters;
+    }
 }

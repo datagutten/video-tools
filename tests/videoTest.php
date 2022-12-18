@@ -5,6 +5,7 @@ namespace datagutten\video_tools\tests;
 use datagutten\tools\files\files;
 use datagutten\video_tools\exceptions\DurationNotFoundException;
 use datagutten\video_tools\video;
+use DateInterval;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -123,6 +124,19 @@ class videoTest extends TestCase
         $this->assertSame(['season' => 1, 'episode' => 2], video::parse_episode('S01E02'));
         $this->assertSame(['season' => 1], video::parse_episode('S01'));
         $this->assertSame(['episode' => 1], video::parse_episode('EP01'));
+    }
+
+    public function testChapters()
+    {
+        $interval = new DateInterval('PT1S');
+        $interval->f = 0.5;
+        $points = [
+            ['chapter1',$interval],
+            ['chapter2',  new DateInterval('PT1M2S')]
+        ];
+        $chapters = video::ffmpeg_chapters($points);
+        $this->assertStringContainsString('CHAPTER01=00:00:01:500', $chapters);
+        $this->assertStringContainsString('CHAPTER02=00:01:02:000', $chapters);
     }
 
     function tearDown(): void
