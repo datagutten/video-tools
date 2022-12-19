@@ -134,7 +134,7 @@ class videoTest extends TestCase
             ['chapter1',$interval],
             ['chapter2',  new DateInterval('PT1M2S')]
         ];
-        $chapters = video::ffmpeg_chapters($points);
+        $chapters = video::mkvmerge_chapters($points);
         $this->assertStringContainsString('CHAPTER01=00:00:01:500', $chapters);
         $this->assertStringContainsString('CHAPTER02=00:01:02:000', $chapters);
     }
