@@ -52,6 +52,9 @@ class videoTest extends TestCase
 
         $time = video::seconds_to_time(3680);
         $this->assertEquals('01:01:20', $time);
+
+        $time = video::seconds_to_time(135.493);
+        $this->assertEquals('00:02:15', $time);
     }
 
     /**

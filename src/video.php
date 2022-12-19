@@ -35,13 +35,17 @@ class video
     /**
      * Convert duration in seconds to hours, minutes and seconds
      * https://stackoverflow.com/a/3172368/2630074
-     * @param int $seconds
+     * @param int|float $seconds
      * @return string Hours:Minutes:Seconds
      */
-	public static function seconds_to_time($seconds)
-	{
-		return sprintf('%02d:%02d:%02d',floor($seconds/3600),floor(intval($seconds/60) % 60),intval($seconds % 60));
-	}
+    public static function seconds_to_time($seconds): string
+    {
+        $seconds = intval($seconds);
+        return sprintf('%02d:%02d:%02d',
+            floor($seconds / 3600),
+            floor(intval($seconds / 60) % 60),
+            $seconds % 60);
+    }
 
 	/**
 	 * Get the duration of a file using ffprobe or mediainfo
