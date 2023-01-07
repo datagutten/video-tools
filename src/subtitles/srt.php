@@ -16,7 +16,11 @@ class srt
     public $sub='';
     public function add_line($start, $end ,$text)
     {
-        $text = trim(str_replace("\n", "\r\n", $text));
+        if (!str_contains($text, "\r"))
+            $text = trim(str_replace("\n", "\r\n", $text));
+        else
+            $text = trim($text);
+
         $this->sub .= $this->counter ."\r\n";
 
         if(strlen($start)===5)
