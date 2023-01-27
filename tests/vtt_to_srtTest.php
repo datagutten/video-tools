@@ -19,13 +19,15 @@ class vtt_to_srtTest extends TestCase
         $expected_output_file = files::path_join(__DIR__, 'test_data', 'test.srt');
         if (file_exists($expected_output_file))
             unlink($expected_output_file);
+        $this->assertFileDoesNotExist($expected_output_file);
 
         $input_file = files::path_join(__DIR__, 'test_data', 'test.vtt');
         $this->assertFileExists($input_file);
         $output_file = vtt_to_srt::convert_file($input_file);
-        //$this->assertSame($expected_output_file, $output_file);
+        $this->assertSame(realpath($expected_output_file), realpath($output_file));
         $this->assertFileExists($output_file);
         $this->assertFileExists($expected_output_file);
+        $this->assertFileEquals(files::path_join(__DIR__, 'test_data', 'test_vtt_converted.srt'), $output_file);
         unlink($output_file);
     }
 

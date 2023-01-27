@@ -10,6 +10,8 @@
 namespace datagutten\video_tools\subtitles;
 
 
+use datagutten\tools\files\files;
+
 class srt
 {
     public $counter = 1;
@@ -39,7 +41,7 @@ class srt
     {
         $pathinfo = pathinfo($filename);
         if($pathinfo['extension']!=='srt')
-            $filename = sprintf('%s/%s.srt', $pathinfo['dirname'], $pathinfo['filename']);
+            $filename = files::path_join($pathinfo['dirname'], $pathinfo['filename'].'.srt');
 
         if(!file_exists($filename) || $overwrite)
         {
