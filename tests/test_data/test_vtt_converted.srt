@@ -1,0 +1,10 @@
+1
+00:00:00,400 --> 00:00:04,560
+Da var det automatisk brannalarm
+på Haraldsplass sykehus.
+
+2
+00:00:04,680 --> 00:00:10,160
+Bravo 2.9 kvitterer call-out
+Haraldsplass sykehus, ABA. Over.
+
