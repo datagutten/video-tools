@@ -94,7 +94,7 @@ class EpisodeFormat implements ArrayAccess
         return trim(sprintf('%s %s', $this->series_name(), $this->episode_number()));
     }
 
-    public function file_name(string $extension = '')
+    public function file_name(string $extension = ''): string
     {
         if (!empty($extension))
             return filnavn(sprintf('%s.%s', $this->episode_name(), $extension));
@@ -125,7 +125,7 @@ class EpisodeFormat implements ArrayAccess
         return !empty($this->$offset);
     }
 
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->$offset;
     }

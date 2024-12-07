@@ -116,7 +116,7 @@ class video
 	}
 
     /**
-     * @param $file
+     * @param string $file Video file to create snapshots from
      * @param array $positions Snapshot positions
      * @param string $output_dir absolute path to a folder where the snapshots are saved
      * @param string $tool Tool to create snapshots
@@ -125,7 +125,7 @@ class video
      * @throws DependencyFailedException Tool to make snapshots not found
      * @throws Exception Snapshot creation failed
      */
-	public static function snapshots(string $file, $positions=array(65,300,600,1000), $output_dir='', $tool='')
+    public static function snapshots(string $file, array $positions = array(65, 300, 600, 1000), string $output_dir = '', string $tool = ''): array
 	{
         $depend_check = new dependcheck();
 		if(!file_exists($file))

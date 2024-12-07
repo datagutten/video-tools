@@ -66,7 +66,7 @@ class video_download
      * @throws exceptions\DurationNotFoundException
      * @throws exceptions\WrongDurationException
      */
-    public static function mkvmerge(string $filename, string $mkv_file = '')
+    public static function mkvmerge(string|array $filename, string $mkv_file = ''): string
     {
         $depend_check = new dependcheck();
         $depend_check->depend('mkvmerge');
@@ -127,8 +127,8 @@ class video_download
      *
      * @param string $stream Stream URL to be downloaded
      * @param string $file File name to be saved (without extension, mp4 will be appended)
-     * @param null $duration Expected duration, used for verifying the downloaded file
-     * @param bool mkvmerge Merge the downloaded file to mkv
+     * @param ?int $duration Expected duration, used for verifying the downloaded file
+     * @param bool $mkvmerge Merge the downloaded file to mkv
      * @param int $loglevel ffmpeg log level
      * @param string $extension Extension to append to the file name
      * @return string
@@ -137,7 +137,7 @@ class video_download
      * @throws exceptions\DurationNotFoundException
      * @throws exceptions\WrongDurationException
      */
-    public static function ffmpeg_download(string $stream, string $file, int $duration = null, bool $mkvmerge = true, int $loglevel = 16, string $extension = 'mp4')
+    public static function ffmpeg_download(string $stream, string $file, int $duration = null, bool $mkvmerge = true, int $loglevel = 16, string $extension = 'mp4'): string
     {
         $check = new video_duration_check;
         if (!empty($duration)) {

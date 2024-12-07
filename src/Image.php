@@ -121,7 +121,7 @@ class Image
      * @param int $y y-coordinate of the point.
      * @return int|false the index of the color or <b>FALSE</b> on failure
      */
-    public function color_at(int $x, int $y): int
+    public function color_at(int $x, int $y): int|false
     {
         return imagecolorat($this->im, $x, $y);
     }
