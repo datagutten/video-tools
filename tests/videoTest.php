@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace datagutten\video_tools\tests;
 
@@ -6,6 +6,7 @@ use datagutten\tools\files\files;
 use datagutten\video_tools\exceptions\DurationNotFoundException;
 use datagutten\video_tools\video;
 use DateInterval;
+use FileNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -28,7 +29,7 @@ class videoTest extends TestCase
         {
             $this->test_files[$extension] = files::path_join(__DIR__, 'test_data', 'sample.' . $extension);
             if (!file_exists($this->test_files[$extension]))
-                copy('http://techslides.com/demos/samples/sample.' . $extension, $this->test_files[$extension]);
+                throw new FileNotFoundException($this->test_files[$extension]);
         }
     }
 
