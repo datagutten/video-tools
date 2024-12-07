@@ -5,8 +5,8 @@ namespace datagutten\video_tools\tests;
 use datagutten\tools\files\files;
 use datagutten\video_tools\exceptions\DurationNotFoundException;
 use datagutten\video_tools\video;
+use datagutten\video_tools\VideoTestData;
 use DateInterval;
-use FileNotFoundException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -27,9 +27,7 @@ class videoTest extends TestCase
         $this->test_file = files::path_join(__DIR__, 'test_data', 'Reklame Kornmo Treider 41.mp4');
         foreach (['mp4', 'mkv'] as $extension)
         {
-            $this->test_files[$extension] = files::path_join(__DIR__, 'test_data', 'sample.' . $extension);
-            if (!file_exists($this->test_files[$extension]))
-                throw new FileNotFoundException($this->test_files[$extension]);
+            $this->test_files[$extension] = VideoTestData::download_file($extension);
         }
     }
 
