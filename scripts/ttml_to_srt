@@ -10,7 +10,7 @@
 use datagutten\video_tools\subtitles;
 use datagutten\video_tools\exceptions;
 
-require __DIR__ . '/loader.php';
+require $_composer_autoload_path ?? __DIR__ . '/../vendor/autoload.php';
 try {
     $ttml_to_srt = new subtitles\ttml_to_srt();
     $ttml_to_srt->convert_file($argv[1]);
